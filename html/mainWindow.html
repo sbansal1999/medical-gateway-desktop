@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Medical Gateway</title>
+
+    <!--    MDL Scripts and Sheets-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+    <link rel="stylesheet" href="../css/mainWindow.css">
+    <link rel="stylesheet" href="../css/universalTheme.css">
+
+    <script src="../js/mainWindow.js"></script>
+</head>
+<body>
+<div>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer
+            mdl-layout--fixed-header">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+                <div class="mdl-layout-spacer"></div>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
+                  mdl-textfield--floating-label mdl-textfield--align-right">
+                    <p id="heading" class="margin-zero">Medical Gateway</p>
+                </div>
+            </div>
+        </header>
+        <div class="mdl-layout__drawer">
+            <span class="mdl-layout-title">Management Portal</span>
+            <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" href="login.html" target="main-content">Login</a>
+            </nav>
+        </div>
+        <main class="mdl-layout__content">
+            <div class="page-content">
+                <iframe name="main-content" id="mainIframe">
+                </iframe>
+            </div>
+        </main>
+    </div>
+</div>
+</body>
+</html>

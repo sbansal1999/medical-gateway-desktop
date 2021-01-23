@@ -1,0 +1,19 @@
+.margin-zero {
+    margin: 0;
+}
+
+#heading {
+    font-size: 2rem;
+}
+
+.page-content {
+    height: 100%;
+}
+
+#mainIframe {
+height: 100%;
+}
+
+
+
+

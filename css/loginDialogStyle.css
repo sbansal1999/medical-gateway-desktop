@@ -1,0 +1,54 @@
+#login-container {
+    border: 3px solid #3c54b4;
+    width: 500px;
+    height: 350px;
+
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+#heading {
+    text-align: center;
+    font-size: 25px;
+    margin-top: 1rem;
+}
+
+#login-container > #credentials {
+    text-align: center;
+}
+
+#loginButton {
+    margin-top: 1rem;
+}
+
+#forgotPasswordContainer {
+    text-align: end;
+    padding-right: 2rem;
+}
+
+#forgotPasswordContainer > a {
+    color: darkred;
+    text-decoration: none;
+    margin-left: 4rem;
+}
+
+#forgotPasswordContainer > a:hover {
+    color: green;
+}
+
+#userChoice {
+    margin-top: 0.5rem;
+}
+
+#userChoice > input {
+    margin-right: 3rem;
+}
+
+#userChoice > label {
+    margin-left: 2rem;
+}
+
