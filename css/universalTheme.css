@@ -2,3 +2,11 @@ body,html {
     font-family: Roboto, "Fira Code", sans-serif;
     font-size: 16px;
 }
+
+.visible {
+    visibility: visible;
+}
+
+.invisible {
+    visibility: hidden;
+}
