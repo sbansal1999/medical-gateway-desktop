@@ -1,0 +1,29 @@
+body, html {
+    overflow: hidden;
+}
+
+h3 {
+    text-align: center;
+    color: #ffd54f;
+}
+
+form {
+    margin-left: 24px;
+}
+
+.firstCol > * {
+    margin-left: 16px;
+}
+
+.secondCol > * {
+    margin-left: 24px;
+}
+
+label {
+    display: inline !important;
+}
+
+body > form > span:nth-child(4) {
+    margin-right: 16px;
+}
+

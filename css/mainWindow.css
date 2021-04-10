@@ -11,7 +11,27 @@
 }
 
 #mainIframe {
-height: 100%;
+    height: 100%;
+}
+
+summary {
+    outline: none;
+}
+
+#navigationMenu > details > a {
+    font-size: 12px;
+    padding-top: 6px;
+    padding-bottom: 4px;
+    font-weight: bold;
+    margin-left: 24px ;
+}
+
+#navigationMenu > a {
+    font-size: 20px;
+}
+
+#navigationMenu > details > summary {
+    font-size: 20px;
 }
 
 
