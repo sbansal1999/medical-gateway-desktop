@@ -10,3 +10,16 @@ body,html {
 .invisible {
     visibility: hidden;
 }
+
+
+.inline {
+    display: inline;
+}
+
+.centerAlign {
+    margin: 0 auto;
+}
+
+body > form > span > table > tbody > tr:nth-child(1) > td:nth-child(3) > span > div.smallFont {
+    font-size: 20px;
+}

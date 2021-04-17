@@ -23,7 +23,25 @@ label {
     display: inline !important;
 }
 
-body > form > span:nth-child(4) {
-    margin-right: 16px;
+img {
+    max-width: 100%;
 }
 
+td.fixWidth {
+    width: 1px;
+}
+
+#camera {
+    transform: rotateY(180deg);
+
+}
+
+.centerDiv {
+    width: 60%;
+    margin: 0 auto;
+}
+
+.marginBetweenButtons {
+    margin-right: 16px;
+
+}
