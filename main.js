@@ -1,4 +1,5 @@
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, ipcMain} = require('electron');
+
 const path = require('path');
 
 function createWindow() {
@@ -32,3 +33,19 @@ app.on('activate', () => {
         }
     }
 );
+
+ipcMain.handle('get-directory-path', (event, fileName) => {
+    return app.getPath('userData');
+});
+
+ipcMain.handle('show-dialog', (event, options) => {
+    const {dialog} = require('electron');
+
+    dialog.showMessageBox(options)
+          .then();
+});
+
+ipcMain.handle('firebase-auth', () => {
+    return require('firebase').auth();
+});
+

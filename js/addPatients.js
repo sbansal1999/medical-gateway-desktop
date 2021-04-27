@@ -1,4 +1,90 @@
 window.addEventListener('load', init);
+const require = parent.require;
+const {ipcRenderer} = require('electron');
+const admin = require('firebase-admin');
+let imageCaptured = false;
+const CHILD_NAME = 'patients_info'
+
+function firebaseInit() {
+    //Can create new service accounts from https://console.cloud.google.com/iam-admin/serviceaccounts?authuser=1&project=medical-gateway-296507
+
+    let key = require('../assets/firebase-admin-private-key.json');
+
+    admin.initializeApp({
+        credential: admin.credential.cert(key),
+        databaseURL: 'https://medical-gateway-296507.firebaseio.com/'
+    });
+
+}
+
+function init() {
+    firebaseInit();
+
+    attachCamera();
+
+    let captureImageButton = document.querySelector("#captureImage");
+    captureImageButton.addEventListener('click', captureImage);
+    captureImage('first');
+
+    let retakeImage = document.querySelector('#retakeImage');
+    retakeImage.addEventListener('click', (e) => {
+        attachCamera();
+        retakeImage.disabled = true;
+        captureImageButton.disabled = false;
+        imageCaptured = false;
+    });
+    retakeImage.disabled = true;
+
+    document.querySelector('#register')
+            .addEventListener('click', registerPatient);
+}
+
+function registerPatient() {
+    const patientDetails = getPatientDetails();
+
+    console.log(patientDetails);
+
+    admin.auth()
+         .createUser(patientDetails)
+         .then((userRecord) => {
+             console.log('success' + userRecord.uid);
+             addIntoDatabase(patientDetails, userRecord.uid);
+         })
+         .catch((error) => {
+             console.log('oops' + error);
+         });
+
+    function addIntoDatabase(patientDetails, uid) {
+        const rootRef = admin.database()
+                             .ref();
+        const childRef = rootRef.child(CHILD_NAME)
+                          .child(uid);
+
+        childRef.set(patientDetails)
+                .then(r => {
+
+                });
+
+
+
+
+    }
+
+
+    function getPatientDetails() {
+        return {
+            name: retrieveTextFromID('pName'),
+            phoneNum: retrieveTextFromID('pMobNum'),
+            // photoURL: document.querySelector('#camera')
+            email: retrieveTextFromID('pEmailAddress')
+        }
+    }
+}
+
+function retrieveTextFromID(id) {
+    return document.querySelector('#' + id)
+        .value;
+}
 
 function attachCamera() {
     Webcam.set({
@@ -11,29 +97,31 @@ function attachCamera() {
     Webcam.attach('#camera');
     Webcam.on('error', () => {
         console.log("Loading");
+        //TODO add a loading image while the camera is still loading, image is in assets folder
     });
 }
 
-function init() {
-    attachCamera();
-
-    document.querySelector("#captureImage")
-            .addEventListener('click', captureImage);
-
-    document.querySelector('#retakeImage')
-            .addEventListener('click', attachCamera);
-
-
-}
-
-function captureImage() {
+function captureImage(msg) {
     Webcam.snap((data_uri) => {
+        //Disables Camera and sets the Captured Image instead of it
         console.log("here");
         Webcam.reset('#camera');
-        // document.querySelector('#placeHolder')
-        //         .setAttribute('src', data_uri);
+
         document.querySelector('#camera').innerHTML += '<img alt="Error" src="' + data_uri + '"/>';
-
-
     });
+
+    if (msg !== 'first') {
+        document.querySelector("#captureImage").disabled = true;
+        imageCaptured = true;
+    }
+    document.querySelector('#retakeImage').disabled = false;
+}
+
+function showToast(message) {
+    let notification = document.querySelector('.mdl-js-snackbar');
+    notification.MaterialSnackbar.showSnackbar(
+        {
+            message: message
+        }
+    );
 }

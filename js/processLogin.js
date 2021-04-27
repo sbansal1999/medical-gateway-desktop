@@ -1,5 +1,6 @@
 window.addEventListener('load', init);
 const require = parent.require;
+const ipc = require('electron').ipcRenderer;
 const firebase = require('firebase');
 
 /**
@@ -32,6 +33,9 @@ function addAdmin() {
 }
 
 function init() {
+
+
+
     firebaseInit();
 
     document.querySelector('#loginButton')
@@ -59,7 +63,6 @@ function doLogin() {
     }
 }
 
-
 function loginAsAdmin(id, password) {
     const rootRef = firebase.database()
                             .ref();
@@ -78,7 +81,6 @@ function loginAsAdmin(id, password) {
                                    .val();
 
                        loginUserWithFirebase(email, password);
-
                    });
                } else {
                    setLoadingVisible(false);
@@ -130,6 +132,7 @@ function firebaseInit() {
     require('firebase/database');
 
     const firebaseConfig = {
+        //DO NOT CHANGE
         apiKey: "AIzaSyBo4fQjML7eJWQjBHYHP1Sy6OIT35DuuDo",
         authDomain: "medical-gateway-296507.firebaseapp.com",
         databaseURL: "https://medical-gateway-296507.firebaseio.com",
@@ -160,3 +163,4 @@ function setLoadingVisible(visibility) {
         loading.classList.remove('is-active')
     }
 }
+

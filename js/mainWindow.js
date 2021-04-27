@@ -24,8 +24,12 @@ function getHTMLFileName(subLink) {
     });
 }
 
-
 function loginMessageReceived(userName, email) {
+    //TODO maybe later add some kind of a welcome screen
+    document.querySelector("#mainIframe")
+            .setAttribute('src', 'about:blank');
+
+    clearNavMenu();
     addLinkWithSubLinks("Patients", "Add Patients", "Search Patients", "Manage Patients");
     addLinkWithSubLinks("Doctors", "Enroll Doctor", "Manage Doctors");
     addLinkWithSubLinks("Staff", "Add Staff", "Modify Staff Details");

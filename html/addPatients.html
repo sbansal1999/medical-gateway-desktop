@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Medical Gateway</title>
+
     <!--    MDL Scripts and Sheets-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css" rel="stylesheet">
@@ -18,15 +19,17 @@
 </head>
 <body>
     <h3 id="heading">Patient Registration</h3>
-    <form action="#">
+    <!--    TODO get this in center for big screens-->
+    <div>
+        <form action="#">
             <span>
                 <table class="inline">
                     <tr>
                         <td class="fixWidth">
                             <span class="firstCol">
                                 <span>Patient's Name</span>
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label ">
-                                    <input class="mdl-textfield__input" id="pName" type="text">
+                                <div class="mdl-textfield mdl-js-textfield">
+                                    <input class="mdl-textfield__input" id="pName" required type="text">
                                     <label class="mdl-textfield__label" for="pName">Name</label>
                                 </div>
                             </span>
@@ -36,7 +39,7 @@
                                 <span>Mobile Number</span>
                                 <div class="mdl-textfield mdl-js-textfield ">
                                     <input class="mdl-textfield__input" id="pMobNum" pattern="^[6-9]\d{9}$"
-                                           type="number">
+                                           required type="number">
                                     <label class="mdl-textfield__label" for="pMobNum">9123456780</label>
                                 </div>
                             </span>
@@ -46,8 +49,10 @@
                                 <div id="camera"></div>
                                 <br>
                                 <div class="centerDiv">
-                                    <button id="captureImage" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect marginBetweenButtons">Capture Image</button>
-                                    <button id="retakeImage" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Retake</button>
+                                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect marginBetweenButtons"
+                                            id="captureImage">Capture Image</button>
+                                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+                                            id="retakeImage">Retake</button>
                                 </div>
                             </span>
                         </td>
@@ -75,8 +80,8 @@
                         <td class="fixWidth">
                             <span class="firstCol">
                                 <span>Residential Address</span>
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label ">
-                                    <input class="mdl-textfield__input" id="pAddress" type="text">
+                                <div class="mdl-textfield mdl-js-textfield">
+                                    <input class="mdl-textfield__input" id="pAddress" required type="text">
                                     <label class="mdl-textfield__label" for="pAddress">Address</label>
                                 </div>
                             </span>
@@ -84,8 +89,8 @@
                         <td class="fixWidth">
                             <span class="secondCol">
                                 <span>Date Of Birth</span>
-                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label ">
-                                    <input class=id="pEmail" pattern="^[6-9]\d{9}$" type="date">
+                                <div class="mdl-textfield mdl-js-textfield">
+                                    <input id="pDOB" type="date">
                                 </div>
                             </span>
                         </td>
@@ -95,7 +100,7 @@
                             <span class="firstCol">
                                 <span>Email Address</span>
                                 <div class="mdl-textfield mdl-js-textfield ">
-                                    <input class="mdl-textfield__input" id="pEmailAddress" type="text">
+                                    <input class="mdl-textfield__input" id="pEmailAddress" required type="text">
                                     <label class="mdl-textfield__label" for="pEmailAddress">example@abc.com</label>
                                 </div>
                             </span>
@@ -104,6 +109,22 @@
                     </tr>
                 </table>
             </span>
-    </form>
+        </form>
+
+        <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent centerAlign"
+               id="register"
+               value="Register">
+
+        <p class="defaultMargin">By Registering, the Patient agrees that He/She has read and understood all the related
+            T&C</p>
+    </div>
+
+    <div aria-atomic="true" aria-live="assertive" aria-relevant="text" class="mdl-snackbar mdl-js-snackbar">
+        <div class="mdl-snackbar__text"></div>
+        <button class="mdl-snackbar__action" type="button"></button>
+    </div>
+
+    <div id="recaptcha-container">Captcha</div>
+
 </body>
 </html>
