@@ -10,7 +10,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^11.2.0"
+    "electron": "^11.2.0",
+    "electron-reloader": "^1.2.1"
   },
   "dependencies": {
     "firebase": "^8.2.4",

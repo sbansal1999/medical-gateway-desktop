@@ -21,7 +21,7 @@
     <h3 id="heading">Patient Registration</h3>
     <!--    TODO get this in center for big screens-->
     <div>
-        <form action="#">
+        <form id="inputForm" action="#">
             <span>
                 <table class="inline">
                     <tr>
@@ -60,25 +60,6 @@
                     <tr>
                         <td class="fixWidth">
                             <span class="firstCol">
-                            <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="mobNumAvail">
-                            <input checked class="mdl-switch__input" id="mobNumAvail" type="checkbox">
-                            <span class="mdl-switch__label">Mobile Available Right Now?</span>
-                            </label>
-                            </span>
-                        </td>
-                        <td class="fixWidth">
-                            <span class="secondCol">
-                            <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="emergency">
-                            <input checked class="mdl-switch__input" id="emergency" type="checkbox">
-                            <span class="mdl-switch__label">Emergency?</span>
-                            </label>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr></tr>
-                    <tr>
-                        <td class="fixWidth">
-                            <span class="firstCol">
                                 <span>Residential Address</span>
                                 <div class="mdl-textfield mdl-js-textfield">
                                     <input class="mdl-textfield__input" id="pAddress" required type="text">
@@ -111,9 +92,14 @@
             </span>
         </form>
 
-        <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent centerAlign"
-               id="register"
-               value="Register">
+        <br>
+
+        <div class="text-center">
+            <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent "
+                   id="register"
+                   value="Register">
+
+        </div>
 
         <p class="defaultMargin">By Registering, the Patient agrees that He/She has read and understood all the related
             T&C</p>
@@ -123,8 +109,6 @@
         <div class="mdl-snackbar__text"></div>
         <button class="mdl-snackbar__action" type="button"></button>
     </div>
-
-    <div id="recaptcha-container">Captcha</div>
 
 </body>
 </html>

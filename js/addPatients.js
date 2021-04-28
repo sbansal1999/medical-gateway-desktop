@@ -36,14 +36,24 @@ function init() {
     retakeImage.disabled = true;
 
     document.querySelector('#register')
-            .addEventListener('click', registerPatient);
+            .addEventListener('click', (evt => {
+                let isValid = document.querySelector('#inputForm')
+                                      .checkValidity();
+                if (isValid === true) {
+                    submitForm();
+                } else {
+                    showToast("Form not filled completely");
+                    //TODO add some possible exceptions here
+                }
+            }));
 }
 
-function registerPatient() {
+function submitForm() {
     const patientDetails = getPatientDetails();
 
     console.log(patientDetails);
 
+    //Adding User into Firebase Auth
     admin.auth()
          .createUser(patientDetails)
          .then((userRecord) => {
@@ -54,22 +64,18 @@ function registerPatient() {
              console.log('oops' + error);
          });
 
+    //Adds Data of the Patient in the Firebase Realtime-Database
     function addIntoDatabase(patientDetails, uid) {
         const rootRef = admin.database()
                              .ref();
         const childRef = rootRef.child(CHILD_NAME)
-                          .child(uid);
+                                .child(uid);
 
         childRef.set(patientDetails)
                 .then(r => {
 
                 });
-
-
-
-
     }
-
 
     function getPatientDetails() {
         return {
@@ -79,6 +85,52 @@ function registerPatient() {
             email: retrieveTextFromID('pEmailAddress')
         }
     }
+}
+
+function generatePatientID() {
+    let id = '';
+    const now = new Date();
+
+    //Adds last 2 digits of the year
+    id += now.getUTCFullYear()
+             .toString()
+             .substr(-2);
+
+    //Month starts from 0
+    let month = now.getUTCMonth() + 1;
+    month = checkLengthAndAddZero(month.toString(), 1);
+    id += month;
+
+    let date = now.getDate();
+    date = checkLengthAndAddZero(date.toString(), 1);
+    id += date + '/';
+
+    let hours = now.getUTCHours();
+    hours = checkLengthAndAddZero(hours.toString(), 1);
+    id += hours;
+
+    let min = now.getUTCMinutes();
+    min = checkLengthAndAddZero(min.toString(), 1);
+    id += min;
+
+    let sec = now.getUTCSeconds();
+    sec = checkLengthAndAddZero(sec.toString(), 1);
+    id += sec;
+
+    let mSec = now.getUTCMilliseconds();
+    mSec = checkLengthAndAddZero(mSec.toString(), 1);
+    id += mSec;
+
+    return id;
+
+}
+
+function checkLengthAndAddZero(string, length) {
+    if (string.length === length) {
+        console.log('added' + string);
+        return '0' + string;
+    }
+    return string;
 }
 
 function retrieveTextFromID(id) {

@@ -46,6 +46,14 @@ ipcMain.handle('show-dialog', (event, options) => {
 });
 
 ipcMain.handle('firebase-auth', () => {
-    return require('firebase').auth();
+    return require('firebase')
+        .auth();
 });
+
+//TODO remove this, its for hot reloading
+try {
+    require('electron-reloader')(module)
+} catch (_) {
+
+}
 

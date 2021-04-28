@@ -25,7 +25,4 @@ body, html {
     margin-right: 50%;
 }
 
-body > form > span > table > tbody > tr:nth-child(1) > td:nth-child(3) > span > div.smallFont {
-    font-size: 20px;
-}
 

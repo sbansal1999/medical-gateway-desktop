@@ -45,12 +45,11 @@ td.fixWidth {
     margin-right: 16px;
 }
 
-/*.center {*/
-/*    position: absolute;*/
-/*    left: 50%;*/
-/*    top: 50%;*/
 
-/*    transform: translate(-50%, -50%);*/
+body > form > span > table > tbody > tr:nth-child(1) > td:nth-child(3) > span > div.smallFont {
+    font-size: 20px;
+}
 
-/*    width: 40%;*/
-/*}*/
+.text-center {
+    text-align: center;
+}
