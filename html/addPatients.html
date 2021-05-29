@@ -7,8 +7,20 @@
     <!--    MDL Scripts and Sheets-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css" rel="stylesheet">
-
     <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+    <!--    Bootstrap Scripts and Sheets-->
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" rel="stylesheet">
+    <script crossorigin="anonymous"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.js" type="text/javascript"></script>
 
@@ -18,7 +30,8 @@
     <script defer src="../js/addPatients.js"></script>
 </head>
 <body>
-    <h3 id="heading">Patient Registration</h3>
+
+    <h3 class="defaultMargin" id="heading">Patient Registration</h3>
     <!--    TODO get this in center for big screens-->
     <div>
         <form action="#" id="inputForm">
@@ -99,18 +112,38 @@
             <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent "
                    id="register"
                    value="Register">
-            <br>
-            <br>
-
-            <!-- MDL Spinner Component -->
-            <div id="registerProgressBar" class="mdl-spinner mdl-js-spinner"></div>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect defaultMargin"
+                    id="reset">Clear
+            </button>
         </div>
+    </div>
 
+    <!--    div to display List of Patients Registered Today-->
+    <div class="text-center">
+        <p class="defaultMargin"><strong>List of Patients Registered Today</strong></p>
+
+        <div>
+            <table class="table table-sm" id="todayTable">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Mobile No.</th>
+                        <th scope="col">Address</th>
+                    </tr>
+                </thead>
+                <tbody id="todayTableTBody">
+                </tbody>
+
+            </table>
+        </div>
 
     </div>
 
-    <div aria-atomic="true" aria-live="assertive" aria-relevant="text" class="mdl-snackbar mdl-js-snackbar">
-        <div class="mdl-snackbar__text"></div>
+
+    <!--    div for displaying Toast-->
+    <div aria-atomic="true" aria-live="assertive" aria-relevant="text" class="mdl-snackbar mdl-js-snackbar text-center">
+        <div class="mdl-snackbar__text text-center"></div>
         <button class="mdl-snackbar__action" type="button"></button>
     </div>
 

@@ -53,3 +53,14 @@ body > form > span > table > tbody > tr:nth-child(1) > td:nth-child(3) > span > 
 .text-center {
     text-align: center;
 }
+
+.tableFixHead {
+    overflow: auto;
+    height: 100px;
+}
+
+.tableFixHead thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
