@@ -6,10 +6,12 @@ let imageCaptured = false;
 function firebaseInit() {
     let key = require('../assets/firebase-admin-private-key.json');
 
-    admin.initializeApp({
-        credential: admin.credential.cert(key),
-        databaseURL: 'https://medical-gateway-296507.firebaseio.com/'
-    });
+    if (admin.apps.length === 0) {
+        admin.initializeApp({
+            credential: admin.credential.cert(key),
+            databaseURL: 'https://medical-gateway-296507.firebaseio.com/'
+        });
+    }
 }
 
 function init() {
