@@ -8,5 +8,6 @@
     <orderEntry type="library" name="firebase-auth" level="application" />
     <orderEntry type="library" name="firebase" level="application" />
     <orderEntry type="library" name="api" level="application" />
+    <orderEntry type="library" name="firebase-functions" level="application" />
   </component>
 </module>

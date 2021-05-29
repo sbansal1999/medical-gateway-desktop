@@ -33,9 +33,6 @@ function addAdmin() {
 }
 
 function init() {
-
-
-
     firebaseInit();
 
     document.querySelector('#loginButton')
@@ -76,6 +73,7 @@ function loginAsAdmin(id, password) {
                if (snapshot.exists()) {
                    setWrongCredVisible(false);
 
+                   //TODO change to 'emailAddress'
                    snapshot.forEach((snap) => {
                        email = snap.child('email')
                                    .val();
@@ -130,6 +128,8 @@ function loginAsStaff(id, password) {
 function firebaseInit() {
     require('firebase/auth');
     require('firebase/database');
+    require('firebase/functions');
+
 
     const firebaseConfig = {
         //DO NOT CHANGE

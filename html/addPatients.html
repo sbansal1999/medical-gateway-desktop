@@ -21,7 +21,7 @@
     <h3 id="heading">Patient Registration</h3>
     <!--    TODO get this in center for big screens-->
     <div>
-        <form id="inputForm" action="#">
+        <form action="#" id="inputForm">
             <span>
                 <table class="inline">
                     <tr>
@@ -38,7 +38,7 @@
                             <span class="secondCol">
                                 <span>Mobile Number</span>
                                 <div class="mdl-textfield mdl-js-textfield ">
-                                    <input class="mdl-textfield__input" id="pMobNum" pattern="^[6-9]\d{9}$"
+                                    <input class="mdl-textfield__input" id="pMobNum" pattern="^\+?\d{10,14}$"
                                            required type="number">
                                     <label class="mdl-textfield__label" for="pMobNum">9123456780</label>
                                 </div>
@@ -91,18 +91,22 @@
                 </table>
             </span>
         </form>
-
         <br>
+        <p class="defaultMargin">By Registering, the Patient agrees that He/She has read and understood all the related
+            T&C</p>
 
         <div class="text-center">
             <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent "
                    id="register"
                    value="Register">
+            <br>
+            <br>
 
+            <!-- MDL Spinner Component -->
+            <div id="registerProgressBar" class="mdl-spinner mdl-js-spinner"></div>
         </div>
 
-        <p class="defaultMargin">By Registering, the Patient agrees that He/She has read and understood all the related
-            T&C</p>
+
     </div>
 
     <div aria-atomic="true" aria-live="assertive" aria-relevant="text" class="mdl-snackbar mdl-js-snackbar">
