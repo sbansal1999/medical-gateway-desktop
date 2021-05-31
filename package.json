@@ -17,12 +17,5 @@
   "dependencies": {
     "firebase": "^8.4.3",
     "firebase-admin": "^9.6.0"
-  },
-  "build": {
-    "appId": "Medical Gateway",
-    "category": "com.electron.medical",
-    "win": {
-      "target": "NSIS"
-    }
   }
 }

@@ -25,4 +25,8 @@ body, html {
     margin-right: 50%;
 }
 
+td.fixWidth {
+    width: 1px;
+}
+
 

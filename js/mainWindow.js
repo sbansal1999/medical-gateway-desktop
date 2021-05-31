@@ -30,10 +30,10 @@ function loginMessageReceived(userName, email) {
             .setAttribute('src', 'about:blank');
 
     clearNavMenu();
-    addLinkWithSubLinks("Patients", "Add Patients", "Manage Patients");
+    addLinkWithSubLinks("Patients", "Add Patients", "Manage Patients", "Manage Appointments");
     addLinkWithSubLinks("Doctors", "Enroll Doctor", "Manage Doctors");
     addLinkWithSubLinks("Staff", "Add Staff", "Modify Staff Details");
-    addLinkWithSubLinks("Pharmacy", "Add Medicines", "View Medicines", "Modify Data");
+    addLinkWithSubLinks("Pharmacy", "Add Medicines", "Add Stock", "View Stock");
 
     let helloTitle = document.querySelector('#helloTitle');
     helloTitle.innerHTML += ' ' + userName;

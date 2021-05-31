@@ -4,6 +4,7 @@ const ipc = require('electron').ipcRenderer;
 const firebase = require('firebase');
 
 /**
+ * DONOT TOUCH
  * Method to add an account as admin. Data is stored in root/admin_info
  */
 function addAdmin() {
@@ -33,10 +34,14 @@ function addAdmin() {
 }
 
 function init() {
+    console.log("run");
     firebaseInit();
 
     document.querySelector('#loginButton')
             .addEventListener('click', doLogin);
+
+    document.querySelector('#forgotPass')
+            .addEventListener('click', forgotPassword);
 
     window.addEventListener('keydown', (evt) => {
         if (evt.key === 'Enter') {
@@ -130,7 +135,6 @@ function firebaseInit() {
     require('firebase/database');
     require('firebase/functions');
 
-
     const firebaseConfig = {
         //DO NOT CHANGE
         apiKey: "AIzaSyBo4fQjML7eJWQjBHYHP1Sy6OIT35DuuDo",
@@ -143,7 +147,48 @@ function firebaseInit() {
         measurementId: "G-F17P54B7N4"
     };
 
-    firebase.initializeApp(firebaseConfig);
+    if (firebase.apps.length === 0)
+        firebase.initializeApp(firebaseConfig);
+}
+
+function forgotPassword() {
+    const rootRef = firebase.database()
+                            .ref();
+
+    let userName = document.querySelector('#loginID')
+        .value;
+
+    let email;
+
+    if (userName === "") {
+        showToast("Invalid Input");
+        return;
+    }
+
+    rootRef.child('admin_info')
+           .orderByChild('userId')
+           .equalTo(userName)
+           .once('value')
+           .then((snapshot) => {
+               if (snapshot.exists()) {
+                   snapshot.forEach((snap) => {
+                       email = snap.child('email')
+                                   .val();
+
+                       firebase.auth()
+                               .sendPasswordResetEmail(email)
+                               .then(() => {
+                                   showToast("Kindly Check the Registered Email Address");
+                               });
+                   });
+               } else {
+                   showToast("Kindly Check the Registered Email Address");
+               }
+           })
+           .catch((error) => {
+               showToast("Contact Support")
+           });
+
 }
 
 function setWrongCredVisible(visibility) {
@@ -162,5 +207,14 @@ function setLoadingVisible(visibility) {
     } else {
         loading.classList.remove('is-active')
     }
+}
+
+function showToast(message) {
+    let notification = document.querySelector('.mdl-js-snackbar');
+    notification.MaterialSnackbar.showSnackbar(
+        {
+            message: message
+        }
+    );
 }
 

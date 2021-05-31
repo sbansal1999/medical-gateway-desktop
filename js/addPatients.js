@@ -56,6 +56,7 @@ function init() {
                     .click();
         }
     });
+
 }
 
 function submitForm() {
