@@ -1,20 +1,35 @@
-const {app, BrowserWindow, ipcMain} = require('electron');
+const {app, BrowserWindow, ipcMain, Menu} = require('electron');
+const isMac = process.platform === "darwin";
 
 const path = require('path');
 
 function createWindow() {
     const window = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 1440,
+        height: 900,
         webPreferences: {
             nodeIntegration: true
         },
-        show: false
+        show: false,
+        resizable: false
     });
 
+    // //Creating Custom Menu
+    // const template = Menu.buildFromTemplate([{
+    //     label: 'Manage',
+    //     submenu: [
+    //         {label: 'Logout'},
+    //         {label: 'Exit'},
+    //     ]
+    // }])
+    //
+    // Menu.setApplicationMenu(template);
+
     const htmlPath = path.join('file://', __dirname, 'html/mainWindow.html');
-    window.maximize();
+
+
     window.loadURL(htmlPath);
+    window.show();
 
 }
 
@@ -47,7 +62,7 @@ ipcMain.handle('show-dialog', (event, options) => {
 
 ipcMain.handle('firebase-auth', () => {
     return require('firebase')
-        .auth();
+    .auth();
 });
 
 //TODO remove this, its for hot reloading

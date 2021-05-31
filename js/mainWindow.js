@@ -30,7 +30,7 @@ function loginMessageReceived(userName, email) {
             .setAttribute('src', 'about:blank');
 
     clearNavMenu();
-    addLinkWithSubLinks("Patients", "Add Patients", "Search Patients", "Manage Patients");
+    addLinkWithSubLinks("Patients", "Add Patients", "Manage Patients");
     addLinkWithSubLinks("Doctors", "Enroll Doctor", "Manage Doctors");
     addLinkWithSubLinks("Staff", "Add Staff", "Modify Staff Details");
     addLinkWithSubLinks("Pharmacy", "Add Medicines", "View Medicines", "Modify Data");

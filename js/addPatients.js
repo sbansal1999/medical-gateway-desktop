@@ -49,56 +49,13 @@ function init() {
             });
 
     fetchTodayList();
-}
 
-/**
- * Method that retrieves data of patients that are registered today
- */
-function fetchTodayList() {
-    clearTable();
-
-    const rootRef = admin.database()
-                         .ref();
-
-    const today = generatePatientID()
-    .substring(0, 8);
-
-    rootRef.child('patients_info')
-           .orderByChild('patientID')
-           .startAt(today)
-           .endAt(today + '\uf8ff')
-           .limitToFirst(5)
-           .once('value')
-           .then((snapshot) => {
-               if (snapshot.exists()) {
-                   snapshot.forEach((snap) => {
-                       addDataToTable(snap.val());
-                   });
-               } else {
-                   //No User Registered Today
-
-               }
-           })
-           .catch((err) => {
-
-           });
-
-    function clearTable() {
-        const todayTable = document.querySelector('#todayTableTBody');
-        todayTable.innerHTML = '';
-    }
-
-    function addDataToTable(val) {
-        const todayTable = document.querySelector('#todayTableTBody');
-
-        todayTable.classList.remove('invisible');
-
-        let row = todayTable.insertRow(-1);
-        row.insertCell(0).innerHTML = val.patientID;
-        row.insertCell(1).innerHTML = val.name;
-        row.insertCell(2).innerHTML = val.phone;
-        row.insertCell(3).innerHTML = val.residentialAddress;
-    }
+    window.addEventListener('keydown', (evt) => {
+        if (evt.key === 'Enter') {
+            document.querySelector('#register')
+                    .click();
+        }
+    });
 }
 
 function submitForm() {
@@ -125,6 +82,9 @@ function submitForm() {
 function resetForm() {
     document.querySelector('#inputForm')
             .reset();
+    document.querySelector('#retakeImage')
+            .click();
+
 }
 
 function uploadImage() {
@@ -179,6 +139,56 @@ function showToast(message) {
             message: message
         }
     );
+}
+
+/**
+ * Method that retrieves data of patients that are registered today
+ */
+function fetchTodayList() {
+    clearTable();
+
+    const rootRef = admin.database()
+                         .ref();
+
+    const today = generatePatientID()
+    .substring(0, 8);
+
+    rootRef.child('patients_info')
+           .orderByChild('patientID')
+           .startAt(today)
+           .endAt(today + '\uf8ff')
+           .limitToFirst(5)
+           .once('value')
+           .then((snapshot) => {
+               if (snapshot.exists()) {
+                   snapshot.forEach((snap) => {
+                       addDataToTable(snap.val());
+                   });
+               } else {
+                   //No User Registered Today
+
+               }
+           })
+           .catch((err) => {
+
+           });
+
+    function clearTable() {
+        const todayTable = document.querySelector('#todayTableTBody');
+        todayTable.innerHTML = '';
+    }
+
+    function addDataToTable(val) {
+        const todayTable = document.querySelector('#todayTableTBody');
+
+        todayTable.classList.remove('invisible');
+
+        let row = todayTable.insertRow(-1);
+        row.insertCell(0).innerHTML = val.patientID;
+        row.insertCell(1).innerHTML = val.name;
+        row.insertCell(2).innerHTML = val.phone;
+        row.insertCell(3).innerHTML = val.residentialAddress;
+    }
 }
 
 /**
@@ -302,6 +312,7 @@ function addIntoDatabase(data, uid) {
     // Adds the obj to the Firebase Realtime Database
     snap.then(() => {
         showToast("Patient Added Successfully");
+        fetchTodayList();
     })
         .catch((error) => {
         })
