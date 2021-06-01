@@ -18,19 +18,19 @@ function firebaseInit() {
 function init() {
     firebaseInit();
     fillData();
-
-    document.querySelector("#searchButton")
-            .addEventListener('click', searchPatients);
-
-    document.querySelector("#refreshButton")
-            .addEventListener('click', fillData);
-    
-    window.addEventListener('keydown', (evt) => {
-        if (evt.key === 'Enter') {
-            document.querySelector('#searchButton')
-                    .click();
-        }
-    });
+    //
+    // document.querySelector("#searchButton")
+    //         .addEventListener('click', searchPatients);
+    //
+    // document.querySelector("#refreshButton")
+    //         .addEventListener('click', fillData);
+    //
+    // window.addEventListener('keydown', (evt) => {
+    //     if (evt.key === 'Enter') {
+    //         document.querySelector('#searchButton')
+    //                 .click();
+    //     }
+    // });
 
 }
 
@@ -109,27 +109,46 @@ function searchPatients() {
 
 }
 
-
 function fillData() {
     clearTable();
 
     const rootRef = admin.database()
                          .ref();
 
-    rootRef.child('patients_info')
+    rootRef.child('appointment_info')
            .once('value')
            .then((snapshot) => {
                if (snapshot.exists()) {
                    snapshot.forEach((snap) => {
-                       addDataToTable(snap.val());
+                       let pid;
+
+                       admin.database()
+                            .ref()
+                            .child('patients_info')
+                            .child(snap.key)
+                            .child('patientID')
+                            .on('value', (current) => {
+                                if (current.exists()) {
+                                    pid = current.val();
+                                }
+                            });
+
+                       console.log(pid);
+                       const num = snap.numChildren();
+
+                       console.log("Values");
+                       console.log(snapshot.child(num + '')
+                               .val());
+
+                       // addDataToTable(snap.val());
                    });
                } else {
+                   showToast("No Appointments Booked");
                }
            })
            .catch((err) => {
-
+               console.log(err);
            });
-
 }
 
 function clearTable() {
@@ -137,16 +156,16 @@ function clearTable() {
     todayTable.innerHTML = '';
 }
 
+
 function addDataToTable(val) {
     const todayTable = document.querySelector('#todayTableTBody');
 
     todayTable.classList.remove('invisible');
 
     let row = todayTable.insertRow(-1);
-    row.insertCell(0).innerHTML = val.patientID;
-    row.insertCell(1).innerHTML = val.name;
-    row.insertCell(2).innerHTML = val.phone;
-    row.insertCell(3).innerHTML = val.residentialAddress;
+    row.insertCell(1).innerHTML = val.patientID;
+    row.insertCell(2).innerHTML = val.name;
+    row.insertCell(3).innerHTML = val.phone;
 }
 
 function showToast(message) {

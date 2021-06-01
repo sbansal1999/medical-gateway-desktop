@@ -48,13 +48,17 @@
                 </div>
             </form>
             <!-- Accent-colored raised button with ripple -->
-            <button id="searchButton" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+                    id="searchButton">
                 Search
             </button>
 
+            <!-- Flat button with ripple -->
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" id="refreshButton">
+                Refresh
+            </button>
+
         </div>
-
-
 
         <table class="table defaultMargin" id="todayTable">
             <thead>
@@ -71,9 +75,6 @@
         </table>
     </div>
 
-    <div aria-live="assertive" aria-atomic="true" aria-relevant="text" class="mdl-snackbar mdl-js-snackbar">
-        <div class="mdl-snackbar__text"></div>
-        <button type="button" class="mdl-snackbar__action"></button>
-    </div>
+
 </body>
 </html>
