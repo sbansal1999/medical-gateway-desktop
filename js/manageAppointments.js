@@ -138,7 +138,9 @@ function fillData() {
 
                        console.log("Values");
                        console.log(snapshot.child(num + '')
-                               .val());
+                                           .val());
+
+                       let row = addIdToTable(pid);
 
                        // addDataToTable(snap.val());
                    });
@@ -154,6 +156,15 @@ function fillData() {
 function clearTable() {
     const todayTable = document.querySelector('#todayTableTBody');
     todayTable.innerHTML = '';
+}
+
+function addIdToTable(pid) {
+    const todayTable = document.querySelector('#todayTableTBody');
+
+    let row = todayTable.insertRow(-1);
+
+    row.insertCell(1).innerHTML = pid;
+    return row;
 }
 
 

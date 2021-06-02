@@ -2,6 +2,7 @@ window.addEventListener('load', init);
 const require = parent.require;
 const admin = require('firebase-admin');
 const dbChild = 'patients_info';
+const limitDB = 20;
 
 function firebaseInit() {
     let key = require('../assets/firebase-admin-private-key.json');
@@ -24,7 +25,7 @@ function init() {
 
     document.querySelector("#refreshButton")
             .addEventListener('click', fillData);
-    
+
     window.addEventListener('keydown', (evt) => {
         if (evt.key === 'Enter') {
             document.querySelector('#searchButton')
@@ -73,6 +74,7 @@ function searchPatients() {
                .orderByChild(key)
                .startAt(query)
                .endAt(query + '\uf8ff')
+               .limitToFirst(limitDB)
                .once('value')
                .then((snapshot) => {
                    if (snapshot.exists()) {
@@ -90,6 +92,7 @@ function searchPatients() {
         rootRef.child(dbChild)
                .orderByChild(key)
                .equalTo(query)
+               .limitToFirst(limitDB)
                .once('value')
                .then((snapshot) => {
                    if (snapshot.exists()) {
@@ -117,6 +120,7 @@ function fillData() {
                          .ref();
 
     rootRef.child('patients_info')
+           .limitToFirst(limitDB)
            .once('value')
            .then((snapshot) => {
                if (snapshot.exists()) {
