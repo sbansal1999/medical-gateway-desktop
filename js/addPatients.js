@@ -94,11 +94,6 @@ function checkLengthAndAddZero(string, length) {
     return string;
 }
 
-function retrieveTextFromID(id) {
-    return document.querySelector('#' + id)
-        .value;
-}
-
 function attachCamera() {
     Webcam.set({
         width: 400,

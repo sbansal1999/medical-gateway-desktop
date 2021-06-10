@@ -2,15 +2,232 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<script>
-    let path = window.location.pathname;
-    let page = path.split("/")
-                   .pop();
-    document.body.innerHTML += page;
+    <title>Medical Gateway</title>
 
-</script>
+    <!--    MDL Scripts and Sheets-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css" rel="stylesheet">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+    <!--    Bootstrap Scripts and Sheets-->
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" rel="stylesheet">
+    <script crossorigin="anonymous"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.js" type="text/javascript"></script>
+
+    <link href="../css/universalTheme.css" rel="stylesheet">
+    <link href="../css/enrollDoctor.css" rel="stylesheet">
+    <link href="../css/addPatients.css" rel="stylesheet"/>
+
+    <script defer src="../js/enrollDoctor.js"></script>
+</head>
+<body class="defaultMargin">
+
+    <h3 id="heading">Doctor Enrollment</h3>
+    <!--    TODO get this in center for big screens-->
+    <div>
+        <form action="#" id="inputForm">
+            <span>
+                <table class="inline">
+                    <tr>
+                        <td class="fixWidth">
+                            <span class="firstCol">
+                                <span>Doctor's Name</span>
+                                <div class="mdl-textfield mdl-js-textfield">
+                                    <input class="mdl-textfield__input" id="name" required type="text">
+                                    <label class="mdl-textfield__label" for="name">Name</label>
+                                </div>
+                            </span>
+                        </td>
+                        <td class="fixWidth">
+                            <span class="secondCol">
+                                <span>Mobile Number</span>
+                                <div class="mdl-textfield mdl-js-textfield ">
+                                    <input class="mdl-textfield__input" id="mobNum" pattern="^\+?\d{10,14}$"
+                                           required type="number">
+                                    <label class="mdl-textfield__label" for="mobNum">9123456780</label>
+                                </div>
+                            </span>
+                        </td>
+                        <td rowspan="4">
+                            <span class="secondCol">
+                                <img id="output"
+                                     src="http://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif"
+                                     style="width: 400px;height: 250px">
+                                <br>
+                                <br>
+                                <div class="centerDiv">
+                                    <label class="centerAlign mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect marginBetweenButtons"
+                                           for="uploadImg">Upload</label>
+                                    <input accept="image/*" class="invisible" id="uploadImg" name="img" type="file">
+                                </div>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixWidth">
+                            <span class="firstCol">
+                                <span>Residential Address</span>
+                                <div class="mdl-textfield mdl-js-textfield">
+                                    <input class="mdl-textfield__input" id="address" required type="text">
+                                    <label class="mdl-textfield__label" for="address">Address</label>
+                                </div>
+                            </span>
+                        </td>
+                        <td class="fixWidth">
+                            <span class="secondCol">
+                                <span>Date Of Birth</span>
+                                <div class="mdl-textfield mdl-js-textfield">
+                                    <input id="DOB" type="date">
+                                </div>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixWidth">
+                            <span class="firstCol">
+                                <span>Email Address</span>
+                                <div class="mdl-textfield mdl-js-textfield ">
+                                    <input class="mdl-textfield__input" id="emailAddress" required type="text">
+                                    <label class="mdl-textfield__label" for="emailAddress">example@abc.com</label>
+                                </div>
+                            </span>
+                        </td>
+                        <td class="fixWidth">
+                        <span class="secondCol">
+                                <div>
+                                     <label for="gender">Gender&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                    <select class="form-control inline" id="gender" style="width: 100px">
+                                        <option>Male</option>
+                                        <option>Female</option>
+                                    </select>
+                                </div>
+                        </span>
+                    </tr>
+                    <tr>
+                        <td class="fixWidth">
+                            <span class="firstCol">
+                                <label for="speciality">Speciality</label>
+                                    <select class="form-control inline" id="speciality" style="width: 200px">
+                                        <option>Physician</option>
+                                        <option>Cardiologist</option>
+                                        <option>Audiologist</option>
+                                        <option>Dentist</option>
+                                        <option>ENT Specialist</option>
+                                        <option>Gynaecologist</option>
+                                        <option>Orthopaedic</option>
+                                        <option>Pediatrician</option>
+                                        <option>Psychiatrist</option>
+                                        <option>Veterinarian</option>
+                                        <option>Radiologist</option>
+                                        <option>Pulmonologist</option>
+                                        <option>Endocrinologist</option>
+                                        <option>Oncologist</option>
+                                        <option>Neurologist</option>
+                                        <option>Cardiothoracic</option>
+                                    </select>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr><td class="fixWidth">
+                        <span class="firstCol">
+                            <br>
+                            <div class="text-center">Available On</div>
+                        </span>
+                    </td></tr>
+                    <tr>
+                        <td class="fixWidth">
+                            <span class="firstCol ">
+                                <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-1">
+                                    <input checked class="mdl-switch__input" id="switch-1" type="checkbox">
+                                    <span class="mdl-switch__label">Monday</span>
+                                </label>
+                            </span>
+                        </td>
+                    <td class="fixWidth">
+                            <span class="secondCol ">
+                                <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-2">
+                                    <input checked class="mdl-switch__input" id="switch-2" type="checkbox">
+                                    <span class="mdl-switch__label">Tuesday</span>
+                                </label>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixWidth">
+                            <span class="firstCol ">
+                                <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-3">
+                                    <input checked class="mdl-switch__input" id="switch-3" type="checkbox">
+                                    <span class="mdl-switch__label">Wednesday</span>
+                                </label>
+                            </span>
+                        </td>
+                    <td class="fixWidth">
+                            <span class="secondCol ">
+                                <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-4">
+                                    <input checked class="mdl-switch__input" id="switch-4" type="checkbox">
+                                    <span class="mdl-switch__label">Thursday</span>
+                                </label>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixWidth">
+                            <span class="firstCol ">
+                                <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-5">
+                                    <input checked class="mdl-switch__input" id="switch-5" type="checkbox">
+                                    <span class="mdl-switch__label">Friday</span>
+                                </label>
+                            </span>
+                        </td>
+                    <td class="fixWidth">
+                            <span class="secondCol ">
+                                <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-6">
+                                    <input checked class="mdl-switch__input" id="switch-6" type="checkbox">
+                                    <span class="mdl-switch__label">Saturday</span>
+                                </label>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixWidth">
+                            <span class="firstCol ">
+                                <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-7">
+                                    <input checked class="mdl-switch__input" id="switch-7" type="checkbox">
+                                    <span class="mdl-switch__label">Sunday</span>
+                                </label>
+                            </span>
+                        </td>
+                    </tr>
+            </table>
+            </span>
+        </form>
+        <br>
+
+        <div class="text-center">
+            <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent "
+                   id="enroll"
+                   value="Enroll">
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect "
+                    id="reset">Clear
+            </button>
+        </div>
+    </div>
+
+    <!--    div for displaying Toast-->
+    <div aria-atomic="true" aria-live="assertive" aria-relevant="text" class="mdl-snackbar mdl-js-snackbar text-center">
+        <div class="mdl-snackbar__text text-center"></div>
+        <button class="mdl-snackbar__action" type="button"></button>
+    </div>
+
 </body>
 </html>
