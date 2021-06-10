@@ -1,7 +1,9 @@
 window.addEventListener('load', init);
 const require = parent.require;
 const admin = require('firebase-admin');
-const dbChild = 'patients_info';
+const dbChildAppoint = 'appointment_info';
+const dbChildPatients = 'patients_info';
+const limitDB = 20;
 
 function firebaseInit() {
     let key = require('../assets/firebase-admin-private-key.json');
@@ -17,24 +19,44 @@ function firebaseInit() {
 
 function init() {
     firebaseInit();
-    fillData();
-    //
-    // document.querySelector("#searchButton")
-    //         .addEventListener('click', searchPatients);
-    //
-    // document.querySelector("#refreshButton")
-    //         .addEventListener('click', fillData);
-    //
-    // window.addEventListener('keydown', (evt) => {
-    //     if (evt.key === 'Enter') {
-    //         document.querySelector('#searchButton')
-    //                 .click();
-    //     }
-    // });
+    fillAppointments();
 
+    document.querySelector("#searchButton")
+            .addEventListener('click', searchPatients);
+
+    document.querySelector("#refreshButton")
+            .addEventListener('click', fillAppointments);
+
+
+    window.addEventListener('keydown', (evt) => {
+        if (evt.key === 'Enter') {
+            searchPatients();
+        }
+    });
+}
+
+function fetchAppointByUID(uid) {
+    const rootRef = admin.database()
+                         .ref();
+
+    rootRef.child(dbChildAppoint)
+           .child(uid)
+           .limitToLast(limitDB)
+           .once('value')
+           .then((snapshot) => {
+               if (snapshot.exists()) {
+                   snapshot.forEach((snap) => {
+                       addDataToTable(snap.val());
+                   });
+               } else {
+                   showToast("No Appointment Found");
+               }
+           });
 }
 
 function searchPatients() {
+    clearTable();
+
     let category = document.querySelector('#searchBy').value;
     let query = document.querySelector('#searchQuery').value;
 
@@ -43,21 +65,22 @@ function searchPatients() {
         return;
     }
 
+    query = query.trim();
     showToast("Searching");
 
     let key;
     switch (category) {
-        case 'Name':
-            key = 'name';
-            break;
-        case 'Address':
-            key = 'residentialAddress';
-            break;
-        case 'Mobile No.':
-            key = 'phone';
-            break;
-        case 'ID':
+        case 'Patient ID':
             key = 'patientID';
+            break;
+        case 'Appointment Date':
+            key = 'dateAppoint';
+            break;
+        case 'Preferred Doctor':
+            key = 'prefDoctor';
+            break;
+        case 'Current Status':
+            key = 'appointmentFulfilled';
             break;
         default:
             showToast("Some Error Occurred");
@@ -65,118 +88,83 @@ function searchPatients() {
 
     const rootRef = admin.database()
                          .ref();
+    let uid;
 
-    clearTable();
-
-    if (key === 'name') {
-        rootRef.child(dbChild)
-               .orderByChild(key)
-               .startAt(query)
-               .endAt(query + '\uf8ff')
-               .once('value')
-               .then((snapshot) => {
-                   if (snapshot.exists()) {
-                       snapshot.forEach((snap) => {
-                           addDataToTable(snap.val());
-                       });
-                   } else {
-                       showToast("No Patient Found");
-                   }
-               })
-               .catch((err) => {
-                   console.log(err);
-               });
-    } else {
-        rootRef.child(dbChild)
-               .orderByChild(key)
+    if (key === 'patientID') {
+        rootRef.child(dbChildPatients)
+               .orderByChild('patientID')
                .equalTo(query)
                .once('value')
                .then((snapshot) => {
                    if (snapshot.exists()) {
                        snapshot.forEach((snap) => {
-                           addDataToTable(snap.val());
+                           uid = snap.key;
+                           fetchAppointByUID(uid);
                        });
                    } else {
                        showToast("No Patient Found");
                    }
-               })
-               .catch
-               ((err) => {
-                   console.log(err);
+               });
+    } else {
+        rootRef.child(dbChildAppoint)
+               .limitToLast(limitDB)
+               .once('value')
+               .then((snapshot) => {
+                   snapshot.forEach((snap) => {
+                       snap.ref.orderByChild(key)
+                           .equalTo(query)
+                           .limitToLast(limitDB)
+                           .once('value')
+                           .then((r) => {
+                               r.forEach((e) => {
+                                   addDataToTable(e.val());
+                                   console.log(e.val());
+                               });
+                           });
+                   });
                });
     }
 
 
 }
 
-function fillData() {
+function fillAppointments() {
     clearTable();
-
+    showToast("Fetching Data");
     const rootRef = admin.database()
                          .ref();
 
     rootRef.child('appointment_info')
-           .once('value')
-           .then((snapshot) => {
-               if (snapshot.exists()) {
-                   snapshot.forEach((snap) => {
-                       let pid;
-
-                       admin.database()
-                            .ref()
-                            .child('patients_info')
-                            .child(snap.key)
-                            .child('patientID')
-                            .on('value', (current) => {
-                                if (current.exists()) {
-                                    pid = current.val();
-                                }
-                            });
-
-                       console.log(pid);
-                       const num = snap.numChildren();
-
-                       console.log("Values");
-                       console.log(snapshot.child(num + '')
-                                           .val());
-
-                       let row = addIdToTable(pid);
-
-                       // addDataToTable(snap.val());
+           .once('value', (snapshot) => {
+               snapshot.forEach((snap) => {
+                   snap.forEach((snapInside) => {
+                       addDataToTable(snapInside.val());
                    });
-               } else {
-                   showToast("No Appointments Booked");
-               }
-           })
-           .catch((err) => {
-               console.log(err);
+               });
            });
 }
 
-function clearTable() {
-    const todayTable = document.querySelector('#todayTableTBody');
-    todayTable.innerHTML = '';
-}
-
-function addIdToTable(pid) {
-    const todayTable = document.querySelector('#todayTableTBody');
-
-    let row = todayTable.insertRow(-1);
-
-    row.insertCell(1).innerHTML = pid;
-    return row;
-}
-
-
 function addDataToTable(val) {
-    const todayTable = document.querySelector('#todayTableTBody');
+    const table = document.querySelector('#todayTableTBody');
 
-    todayTable.classList.remove('invisible');
+    const row = table.insertRow(-1);
+    row.insertCell(0).innerHTML = val.patientID;
+    row.insertCell(1).innerHTML = val.dateAppoint;
+    row.insertCell(2).innerHTML = val.prefDoctor;
 
-    let row = todayTable.insertRow(-1);
-    row.insertCell(1).innerHTML = val.patientID;
-    row.insertCell(2).innerHTML = val.name;
-    row.insertCell(3).innerHTML = val.phone;
+    let currentStat = val.appointmentFulfilled;
+
+    let dataInsert;
+    if (currentStat === true) {
+        dataInsert = "Appointment Fulfilled";
+    } else {
+        dataInsert = "Not Fulfilled Yet";
+    }
+    row.insertCell(3).innerHTML = dataInsert;
+}
+
+function clearTable() {
+    document.querySelector('#todayTableTBody').innerHTML = "";
 }
 
 function showToast(message) {

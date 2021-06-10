@@ -35,10 +35,11 @@
         <div class="form-group">
             <label for="searchBy"> Search By: </label>
             <select class="form-control inline" id="searchBy" style="width: 150px">
-                <option>Name</option>
-                <option>Address</option>
-                <option>Mobile No.</option>
                 <option>ID</option>
+                <option>Name</option>
+                <option>Mobile No.</option>
+                <option>Address</option>
+                <option>In Date</option>
             </select>
             <!-- Simple Textfield -->
             <form action="#" class="inline defaultMargin">
@@ -75,6 +76,10 @@
         </table>
     </div>
 
+    <div aria-live="assertive" aria-atomic="true" aria-relevant="text" class="mdl-snackbar mdl-js-snackbar">
+        <div class="mdl-snackbar__text"></div>
+        <button type="button" class="mdl-snackbar__action"></button>
+    </div>
 
 </body>
 </html>

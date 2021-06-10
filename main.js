@@ -14,18 +14,19 @@ function createWindow() {
         resizable: false
     });
 
-    //Creating Custom Menu
-    const template = Menu.buildFromTemplate([{
-        label: 'Manage',
-        submenu: [
-            {label: 'Logout'},
-            {label: 'Exit'},
-        ]
-    }]);
-
-    Menu.setApplicationMenu(template);
+    // //Creating Custom Menu
+    // const template = Menu.buildFromTemplate([{
+    //     label: 'Manage',
+    //     submenu: [
+    //         {label: 'Logout'},
+    //         {label: 'Exit'},
+    //     ]
+    // }])
+    //
+    // Menu.setApplicationMenu(template);
 
     const htmlPath = path.join('file://', __dirname, 'html/mainWindow.html');
+
 
     window.loadURL(htmlPath);
     window.show();

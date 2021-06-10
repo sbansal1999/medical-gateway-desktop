@@ -34,7 +34,6 @@ function addAdmin() {
 }
 
 function init() {
-    console.log("run");
     firebaseInit();
 
     document.querySelector('#loginButton')
@@ -49,6 +48,16 @@ function init() {
                     .click();
         }
     });
+
+    autofillData();
+
+    function autofillData() {
+        document.querySelector('#loginID').value = 'admin';
+        document.querySelector('#password').value = 'admin123';
+        document.querySelector('#loginButton')
+                .click();
+    }
+
 }
 
 function doLogin() {

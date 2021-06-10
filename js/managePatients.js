@@ -28,11 +28,16 @@ function init() {
 
     window.addEventListener('keydown', (evt) => {
         if (evt.key === 'Enter') {
-            document.querySelector('#searchButton')
-                    .click();
+            searchPatients();
         }
     });
 
+}
+
+function getIdFromDate(query) {
+    const input = query.replaceAll('/', '');
+
+    return input.substr(6, 2) + input.substr(2, 2) + input.substr(0, 2);
 }
 
 function searchPatients() {
@@ -57,6 +62,10 @@ function searchPatients() {
         case 'Mobile No.':
             key = 'phone';
             break;
+        case 'In Date':
+            key = 'inDate';
+            query = getIdFromDate(query);
+            break;
         case 'ID':
             key = 'patientID';
             break;
@@ -69,7 +78,11 @@ function searchPatients() {
 
     clearTable();
 
-    if (key === 'name') {
+    if (key === 'name' || key === 'inDate') {
+
+        if (key === 'inDate') {
+            key = 'patientID';
+        }
         rootRef.child(dbChild)
                .orderByChild(key)
                .startAt(query)
@@ -112,8 +125,8 @@ function searchPatients() {
 
 }
 
-
 function fillData() {
+    showToast("Fetching Data");
     clearTable();
 
     const rootRef = admin.database()
@@ -133,7 +146,6 @@ function fillData() {
            .catch((err) => {
 
            });
-
 }
 
 function clearTable() {

@@ -59,13 +59,14 @@
                         </td>
                         <td rowspan="4">
                             <span class="secondCol">
-                                <div id="camera"></div>
+                                <img id="output" src="http://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif"
+                                     style="width: 400px;height: 250px">
+                                <br>
                                 <br>
                                 <div class="centerDiv">
-                                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect marginBetweenButtons"
-                                            id="captureImage">Capture Image</button>
-                                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-                                            id="retakeImage">Retake</button>
+                                    <label class="centerAlign mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect marginBetweenButtons"
+                                           for="uploadImg">Upload</label>
+                                    <input accept="image/*" class="invisible" id="uploadImg" name="img" type="file">
                                 </div>
                             </span>
                         </td>
@@ -139,7 +140,6 @@
         </div>
 
     </div>
-
 
     <!--    div for displaying Toast-->
     <div aria-atomic="true" aria-live="assertive" aria-relevant="text" class="mdl-snackbar mdl-js-snackbar text-center">

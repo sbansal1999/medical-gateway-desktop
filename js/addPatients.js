@@ -15,21 +15,7 @@ function firebaseInit() {
 }
 
 function init() {
-    attachCamera();
     firebaseInit();
-
-    let captureImageButton = document.querySelector("#captureImage");
-    captureImageButton.addEventListener('click', captureImage);
-    captureImage('first');
-
-    let retakeImage = document.querySelector('#retakeImage');
-    retakeImage.addEventListener('click', () => {
-        attachCamera();
-        retakeImage.disabled = true;
-        captureImageButton.disabled = false;
-        imageCaptured = false;
-    });
-    retakeImage.disabled = true;
 
     document.querySelector('#register')
             .addEventListener('click', (() => {
@@ -47,6 +33,15 @@ function init() {
             .addEventListener('click', () => {
                 resetForm();
             });
+
+    let inputElement = document.querySelector('#uploadImg');
+    inputElement.onchange = function (evt) {
+        let fileList = inputElement.files;
+        document.querySelector('#output').src = URL.createObjectURL(fileList[0]);
+
+        console.log(fileList[0].name);
+
+    };
 
     fetchTodayList();
 
