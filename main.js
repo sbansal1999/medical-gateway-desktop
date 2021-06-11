@@ -5,15 +5,14 @@ const path = require('path');
 
 function createWindow() {
     const window = new BrowserWindow({
-        // width: 1440,
-        // height: 900,
+        width: 1440,
+        height: 900,
         webPreferences: {
             nodeIntegration: true
         },
         show: false,
         resizable: false
     });
-    window.maximize();
 
     // //Creating Custom Menu
     // const template = Menu.buildFromTemplate([{
