@@ -27,7 +27,6 @@ function init() {
     document.querySelector("#refreshButton")
             .addEventListener('click', fillAppointments);
 
-
     window.addEventListener('keydown', (evt) => {
         if (evt.key === 'Enter') {
             searchPatients();
