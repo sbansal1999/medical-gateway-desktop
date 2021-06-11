@@ -27,8 +27,8 @@ function createWindow() {
 
     const htmlPath = path.join('file://', __dirname, 'html/mainWindow.html');
 
-
-    window.loadURL(htmlPath);
+    window.loadURL(htmlPath)
+           .then();
     window.show();
 
 }
@@ -53,11 +53,15 @@ ipcMain.handle('get-directory-path', (event, fileName) => {
     return app.getPath('userData');
 });
 
-ipcMain.handle('show-dialog', (event, options) => {
+ipcMain.handle('show-dialog', async (event, options) => {
     const {dialog} = require('electron');
+    let result;
 
-    dialog.showMessageBox(options)
-          .then();
+    await dialog.showMessageBox(options)
+                .then((r) => {
+                    result = r.response;
+                });
+    return result;
 });
 
 ipcMain.handle('firebase-auth', () => {

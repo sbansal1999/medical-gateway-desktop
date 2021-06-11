@@ -25,7 +25,7 @@ function init() {
                 if (isValid === true) {
                     submitForm();
                 } else {
-                    showToast("Form not filled completely");
+                    showToast("Kindly fill the form completely");
                     //TODO add some possible exceptions here
                 }
             }));

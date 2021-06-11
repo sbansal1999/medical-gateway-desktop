@@ -22,6 +22,8 @@
             integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
             src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
     <link href="../css/universalTheme.css" rel="stylesheet">
     <link href="../css/addPatients.css" rel="stylesheet"/>
 
@@ -40,8 +42,8 @@
                             <span class="firstCol">
                                 <span>Medicine Name</span>
                                 <div class="mdl-textfield mdl-js-textfield">
-                                    <input class="mdl-textfield__input" id="mName" required type="text">
-                                    <label class="mdl-textfield__label" for="mName">Name</label>
+                                    <input class="mdl-textfield__input" id="name" required type="text">
+                                    <label class="mdl-textfield__label" for="name">Name</label>
                                 </div>
                             </span>
                         </td>
@@ -49,9 +51,24 @@
                             <span class="secondCol">
                                 <span>Medicine ID</span>
                                 <div class="mdl-textfield mdl-js-textfield ">
-                                    <input class="mdl-textfield__input" id="mID"
-                                           required type="number">
-                                    <label class="mdl-textfield__label" for="mID">ID</label>
+                                    <input class="mdl-textfield__input" id="medID"
+                                           pattern="M\d{5}" required type="text">
+                                    <label class="mdl-textfield__label" for="medID">M12345</label>
+                                </div>
+                            </span>
+                        </td>
+                        <td rowspan="4">
+                            <span class="secondCol">
+                                <img id="output"
+                                     src="http://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif"
+                                     style="width: 400px;height: 250px">
+                                <br>
+                                <br>
+                                <div class="centerDiv">
+                                    <label class="centerAlign mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect marginBetweenButtons"
+                                           for="uploadImg">Upload</label>
+                                    <input accept="image/*" class="invisible" id="uploadImg" name="uploadImg"
+                                           type="file">
                                 </div>
                             </span>
                         </td>
@@ -61,17 +78,17 @@
                             <span class="firstCol">
                                <span>Unit</span>
                                 <div class="mdl-textfield mdl-js-textfield">
-                                    <input class="mdl-textfield__input" id="mUnit" required type="text">
-                                    <label class="mdl-textfield__label" for="mUnit">Eg. 1 Bottle of 18 Tablets</label>
+                                    <input class="mdl-textfield__input" id="unit" required type="text">
+                                    <label class="mdl-textfield__label" for="unit">Eg. 1 Bottle of 18 Tablets</label>
                                 </div>
                             </span>
                         </td>
                         <td class="fixWidth">
                             <span class="secondCol">
-                                <span>Price (in &#8377;)</span>
+                                <span>MRP (in &#8377;)</span>
                                 <div class="mdl-textfield mdl-js-textfield">
-                                    <input class="mdl-textfield__input" id="mPrice" required type="number">
-                                    <label class="mdl-textfield__label" for="mPrice">Per 1 UNIT</label>
+                                    <input class="mdl-textfield__input" id="price" required type="number" step="0.01">
+                                    <label class="mdl-textfield__label" for="price">Per 1 UNIT</label>
                                 </div>
                             </span>
                         </td>
@@ -82,23 +99,49 @@
                             <span class="firstCol">
                                 <span>Manufactured By:</span>
                                 <div class="mdl-textfield mdl-js-textfield ">
-                                    <input class="mdl-textfield__input" id="mMFG" required type="text">
-                                    <label class="mdl-textfield__label" for="mMFG"></label>
+                                    <input class="mdl-textfield__input" id="mfgBy" required type="text">
+                                    <label class="mdl-textfield__label" for="mfgBy">Company Name</label>
                                 </div>
                             </span>
                         </td>
                         <td class="fixWidth">
+                            <span class="secondCol">
+                                <span>Initial Units Available</span>
+                                <div class="mdl-textfield mdl-js-textfield">
+                                    <input class="mdl-textfield__input" id="quantity" required type="number">
+                                    <label class="mdl-textfield__label" for="quantity">Units Available</label>
+                                </div>
+                            </span>
+                        </td>
                     </tr>
                     <tr>
                         <td class="fixWidth">
-
-
+                            <span class="firstCol">
+                                <label for="category">Category</label>
+                                    <select class="form-control inline" id="category" style="width: 200px">
+                                        <option>Analgesics</option>
+                                        <option>Antacids</option>
+                                        <option>Anti-anxiety Drugs</option>
+                                        <option>Antibacterials</option>
+                                        <option>Antibiotics</option>
+                                        <option>Antidepressants</option>
+                                        <option>Antifungals</option>
+                                        <option>Antivirals</option>
+                                        <option>Equipments</option>
+                                        <option>Injections</option>
+                                        <option>Pain Relievers</option>
+                                        <option>Supplements</option>
+                                        <option>Sleeping Drugs</option>
+                                        <option>Vitamins</option>
+                                    </select>
+                            </span>
                         </td>
                     </tr>
                 </table>
             </span>
         </form>
         <br>
+
 
         <div class="text-center">
             <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent "
@@ -108,6 +151,27 @@
                     id="reset">Clear
             </button>
         </div>
+    </div>
+
+    <div class="text-center">
+        <p class="defaultMargin"><strong>List of Currently Registered Medicines</strong></p>
+
+        <div>
+            <table class="table table-sm" id="todayTable">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Medicine Name</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Price</th>
+                    </tr>
+                </thead>
+                <tbody id="todayTableTBody">
+                </tbody>
+
+            </table>
+        </div>
+
     </div>
 
     <!--    div for displaying Toast-->

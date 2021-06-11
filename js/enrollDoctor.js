@@ -1,4 +1,3 @@
-// TODO Store Sunday as 0 Monday as 1...
 window.addEventListener('load', init);
 const require = parent.require;
 const admin = require('firebase-admin');
@@ -16,7 +15,7 @@ function init() {
                 if (isValid === true) {
                     submitForm();
                 } else {
-                    showToast("Form not filled completely");
+                    showToast("Kindly fill the form completely");
                     //TODO add some possible exceptions here
                 }
             }));
@@ -31,6 +30,8 @@ function init() {
             .addEventListener('click', () => {
                 resetForm();
             });
+
+    //TODO add keypress event on Enter
 }
 
 function firebaseAdminInit() {
@@ -48,6 +49,7 @@ function firebaseAdminInit() {
  * Initializes Firebase Settings
  */
 function firebaseInit() {
+
     require('firebase/auth');
     require('firebase/database');
     require('firebase/functions');
@@ -87,7 +89,7 @@ function submitForm() {
             dob: retrieveTextFromID('DOB'),
             id: generateDocID(),
             gender: getGender(),
-            speciality: getSpeciality(),
+            speciality: retrieveTextFromID('#speciality'),
             available: getAvailable()
 
         }
@@ -117,7 +119,6 @@ function addDoc(details) {
                               displayName: details.displayName,
                           })
                           .then((user) => {
-
                               const imgURL = uploadImg(user.uid);
                               if (imgURL !== null) {
                                   user.photoURL = imgURL;
@@ -152,70 +153,6 @@ function addDoc(details) {
          .catch((error) => {
              showToast("Some Error Occurred");
          });
-}
-
-function uploadImg(uid) {
-    let inputElement = document.querySelector('#uploadImg');
-    const filePath = inputElement.files[0].path;
-
-    const fs = require('fs');
-
-    fs.readFile(filePath, (err, data) => {
-        if (err) {
-            console.log("error in fs");
-        } else {
-            data.toString();
-
-            const strRef = firebase.storage()
-                                   .ref()
-                                   .child(uid)
-                                   .child('profile_pic.jpg');
-
-            const metaData = {
-                contentType: 'image/jpeg'
-            };
-
-            strRef.put(data)
-                  .then((snap) => {
-
-                      strRef.updateMetadata(metaData)
-                            .then(() => {
-                                console.log('updated');
-                            });
-
-                      strRef.getDownloadURL()
-                            .then((snap) => {
-                                console.log("url");
-                                console.log(snap);
-
-                                const rootRef = firebase.database()
-                                                        .ref();
-                                rootRef.child(dbChild)
-                                       .child(uid)
-                                       .update({
-                                           photoURL: snap,
-                                       })
-                                       .then(() => {
-
-                                       });
-
-                                return snap;
-                            })
-                            .catch((err) => {
-                            });
-
-                      console.log("File Uploaded Successfully");
-                  })
-                  .catch((err) => {
-                      console.log("Error");
-                  });
-
-
-        }
-    });
-
-
-    return null;
 }
 
 /**
@@ -266,6 +203,69 @@ function retrieveTextFromID(id) {
         .value;
 }
 
+function uploadImg(uid) {
+    let inputElement = document.querySelector('#uploadImg');
+    const filePath = inputElement.files[0].path;
+
+    if (filePath !== null) {
+        const fs = require('fs');
+
+        fs.readFile(filePath, (err, data) => {
+            if (err) {
+                console.log("error in fs");
+            } else {
+                const strRef = firebase.storage()
+                                       .ref()
+                                       .child(uid)
+                                       .child('profile_pic.jpg');
+
+                const metaData = {
+                    contentType: 'image/jpeg'
+                };
+
+                strRef.put(data)
+                      .then(() => {
+
+                          strRef.updateMetadata(metaData)
+                                .then(() => {
+                                    console.log('updated');
+                                });
+
+                          strRef.getDownloadURL()
+                                .then((snap) => {
+                                    console.log("url");
+                                    console.log(snap);
+
+                                    const rootRef = firebase.database()
+                                                            .ref();
+                                    rootRef.child(dbChild)
+                                           .child(uid)
+                                           .update({
+                                               photoURL: snap,
+                                           })
+                                           .then(() => {
+
+                                           });
+
+                                    return snap;
+                                })
+                                .catch((err) => {
+                                });
+
+                          console.log("File Uploaded Successfully");
+                      })
+                      .catch((err) => {
+                          console.log("Error");
+                      });
+
+
+            }
+        });
+    }
+
+    return null;
+}
+
 function checkLengthAndAddZero(string, length) {
     if (string.length === length) {
         return '0' + string;
@@ -305,10 +305,6 @@ function getAvailable() {
 
 function getGender() {
     return document.querySelector('#gender').value;
-}
-
-function getSpeciality() {
-    return document.querySelector('#speciality').value;
 }
 
 function generateDocID() {
