@@ -52,8 +52,8 @@
                                 <span>Medicine ID</span>
                                 <div class="mdl-textfield mdl-js-textfield ">
                                     <input class="mdl-textfield__input" id="medID"
-                                           pattern="M\d{5}" required type="text">
-                                    <label class="mdl-textfield__label" for="medID">M12345</label>
+                                           pattern="\d{5}" required type="number">
+                                    <label class="mdl-textfield__label" for="medID">12345</label>
                                 </div>
                             </span>
                         </td>
@@ -157,7 +157,7 @@
         <p class="defaultMargin"><strong>List of Currently Registered Medicines</strong></p>
 
         <div>
-            <table class="table table-sm" id="todayTable">
+            <table class="table table-sm" id="medTable">
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
@@ -166,7 +166,7 @@
                         <th scope="col">Price</th>
                     </tr>
                 </thead>
-                <tbody id="todayTableTBody">
+                <tbody id="medTableTBody">
                 </tbody>
 
             </table>

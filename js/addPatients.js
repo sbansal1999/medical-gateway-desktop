@@ -17,6 +17,7 @@ function firebaseInit() {
 
 function init() {
     firebaseInit();
+    fetchTodayList();
 
     document.querySelector('#register')
             .addEventListener('click', (() => {
@@ -44,7 +45,7 @@ function init() {
 
     };
 
-    fetchTodayList();
+
 
     window.addEventListener('keydown', (evt) => {
         if (evt.key === 'Enter') {
@@ -116,7 +117,7 @@ function fetchTodayList() {
            .orderByChild('patientID')
            .startAt(today)
            .endAt(today + '\uf8ff')
-           .limitToFirst(5)
+           .limitToLast(5)
            .once('value')
            .then((snapshot) => {
                if (snapshot.exists()) {
@@ -139,8 +140,6 @@ function fetchTodayList() {
 
     function addDataToTable(val) {
         const todayTable = document.querySelector('#todayTableTBody');
-
-        todayTable.classList.remove('invisible');
 
         let row = todayTable.insertRow(-1);
         row.insertCell(0).innerHTML = val.patientID;

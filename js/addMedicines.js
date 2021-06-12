@@ -1,31 +1,27 @@
 window.addEventListener('load', init);
 const require = parent.require;
-const {dialog} = require('electron');
 const admin = require('firebase-admin');
 const firebase = require('firebase');
 const {ipcRenderer} = require('electron');
 const dbChild = 'medicine_info';
 
+//File limit size of 500 KiloBytes
+const sizeLimit = 1024 * 500;
+let imageSelected = false;
+
 function init() {
     firebaseAdminInit();
     firebaseInit();
-
-    // (async () => {
-    //     const test = await ipcRenderer.invoke('show-dialog', {
-    //         type: 'warning',
-    //         title: 'Proceed?',
-    //         message: 'No Image has been uploaded are you sure you want to proceed?',
-    //         buttons: ["Yes", "No"],
-    //     });
-    //     console.log(test);
-    // })();
+    fetchList();
 
     document.querySelector('#addMedicine')
             .addEventListener('click', (() => {
                 let isValid = document.querySelector('#inputForm')
                                       .checkValidity();
-                if (isValid === true) {
+                if (isValid === true && imageSelected === true) {
                     submitForm();
+                } else if (imageSelected !== true) {
+                    showToast("Kindly Upload an Image First")
                 } else {
                     showToast("Kindly fill the form completely");
                     //TODO add some possible exceptions here
@@ -34,8 +30,15 @@ function init() {
 
     let inputElement = document.querySelector('#uploadImg');
     inputElement.onchange = function (evt) {
-        let fileList = inputElement.files;
-        document.querySelector('#output').src = URL.createObjectURL(fileList[0]);
+        let selectedFile = inputElement.files[0];
+
+        //Restricts the size of image that can be selected
+        if (selectedFile.size < sizeLimit) {
+            imageSelected = true;
+            document.querySelector('#output').src = URL.createObjectURL(selectedFile);
+        } else {
+            showToast("Selected File Exceeds the File Limit of " + sizeLimit / 1024 + " KB");
+        }
     };
 
     document.querySelector('#reset')
@@ -60,7 +63,6 @@ function firebaseAdminInit() {
  * Initializes Firebase Settings
  */
 function firebaseInit() {
-
     require('firebase/auth');
     require('firebase/database');
     require('firebase/functions');
@@ -83,12 +85,48 @@ function firebaseInit() {
         firebase.initializeApp(firebaseConfig);
 }
 
+function fetchList() {
+    clearTable();
+
+    const rootRef = admin.database()
+                         .ref();
+
+    rootRef.child(dbChild)
+           .limitToLast(5)
+           .once('value')
+           .then((snapshot) => {
+               if (snapshot.exists()) {
+                   snapshot.forEach((snap) => {
+                       addDataToTable(snap.key, snap.val());
+                   });
+               } else {
+                   //No Medicines are Currently Registered
+               }
+           })
+           .catch((err) => {
+               console.log(err);
+           });
+
+    function clearTable() {
+        const table = document.querySelector('#medTableTBody');
+        table.innerHTML = '';
+    }
+
+    function addDataToTable(id, val) {
+        const table = document.querySelector('#medTableTBody');
+
+        let row = table.insertRow(-1);
+        row.insertCell(0).innerHTML = id;
+        row.insertCell(1).innerHTML = val.name;
+        row.insertCell(2).innerHTML = val.category;
+        row.insertCell(3).innerHTML = val.price;
+    }
+}
+
 function submitForm() {
     showToast("Adding Medicine");
 
     const medDetails = getMedDetails();
-    console.log(medDetails);
-
     addMed(medDetails, retrieveTextFromID('medID'));
 
     function getMedDetails() {
@@ -101,7 +139,6 @@ function submitForm() {
             category: retrieveTextFromID('category')
         }
     }
-
 }
 
 function addIntoDatabase(data, id) {
@@ -131,8 +168,8 @@ function addMed(medDetails, id) {
              if (snap.exists()) {
                  showToast("Medicine is Already Added");
              } else {
-                 uploadImg(id);
 
+                 uploadImg(id);
                  addIntoDatabase(medDetails, id);
              }
 
@@ -142,9 +179,30 @@ function addMed(medDetails, id) {
              console.log(err);
          });
 
+    // function showImageNotSelectedWindow() {
+    //     if (imageSelected === true) {
+    //         uploadImg(id);
+    //     } else {
+    //         //Makes a call to ipcMain defined in main.js to show a dialog seeking confirmation
+    //         (async () => {
+    //             let response = await ipcRenderer.invoke('show-dialog', {
+    //                 type: 'warning',
+    //                 title: 'Proceed?',
+    //                 message: 'No Image has been uploaded are you sure you want to proceed?',
+    //                 buttons: ["Yes", "No"],
+    //             });
+    //             gotResponse(response);
+    //         })();
+    //     }
+    //
+    // }
 
 }
 
+/**
+ * Uploads the image to the Firebase Storage as well as adds the reference to the Entry in the Database
+ * @param id ID of the medicine
+ */
 function uploadImg(id) {
     let inputElement = document.querySelector('#uploadImg');
     const filePath = inputElement.files[0].path;
@@ -174,7 +232,8 @@ function uploadImg(id) {
 
                           strRef.getDownloadURL()
                                 .then((snap) => {
-                                    const rootRef = firebase.database().ref();
+                                    const rootRef = firebase.database()
+                                                            .ref();
 
                                     rootRef.child(dbChild)
                                            .child(id)
@@ -195,6 +254,10 @@ function uploadImg(id) {
  * @return {string} The Fetched Text
  */
 function retrieveTextFromID(id) {
+    if (id === 'medID') {
+        return 'M' + document.querySelector('#' + id)
+            .value
+    }
     return document.querySelector('#' + id)
         .value;
 }

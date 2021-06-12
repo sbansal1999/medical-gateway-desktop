@@ -4,6 +4,10 @@ const admin = require('firebase-admin');
 const dbChild = 'doctors_info';
 const firebase = require('firebase');
 
+//File limit size of 500 KiloBytes
+const sizeLimit = 1024 * 500;
+let imageSelected = false;
+
 function init() {
     firebaseAdminInit();
     firebaseInit();
@@ -12,8 +16,10 @@ function init() {
             .addEventListener('click', (() => {
                 let isValid = document.querySelector('#inputForm')
                                       .checkValidity();
-                if (isValid === true) {
+                if (isValid === true && imageSelected === true) {
                     submitForm();
+                } else if (imageSelected !== true) {
+                    showToast("Kindly Upload an Image First")
                 } else {
                     showToast("Kindly fill the form completely");
                     //TODO add some possible exceptions here
@@ -22,8 +28,15 @@ function init() {
 
     let inputElement = document.querySelector('#uploadImg');
     inputElement.onchange = function (evt) {
-        let fileList = inputElement.files;
-        document.querySelector('#output').src = URL.createObjectURL(fileList[0]);
+        let selectedFile = inputElement.files[0];
+
+        //Restricts the size of image that can be selected
+        if (selectedFile.size < sizeLimit) {
+            imageSelected = true;
+            document.querySelector('#output').src = URL.createObjectURL(selectedFile);
+        } else {
+            showToast("Selected File Exceeds the File Limit of " + sizeLimit / 1024 + " KB");
+        }
     };
 
     document.querySelector('#reset')
@@ -125,7 +138,6 @@ function addDoc(details) {
                               }
 
                               addIntoDatabase(details, user.uid);
-                              //TODO add photo url in DB entry as well
                           })
                           .catch((error) => {
                               switch (error.code) {
@@ -231,6 +243,7 @@ function uploadImg(uid) {
                                     console.log('updated');
                                 });
 
+                          //Add photo url to DB for fetching in the android app
                           strRef.getDownloadURL()
                                 .then((snap) => {
                                     console.log("url");
