@@ -19,6 +19,7 @@ function init() {
     firebaseInit();
     fetchTodayList();
 
+    //TODO add max date to today in datepicker
     document.querySelector('#register')
             .addEventListener('click', (() => {
                 let isValid = document.querySelector('#inputForm')
@@ -44,7 +45,6 @@ function init() {
         console.log(fileList[0].name);
 
     };
-
 
 
     window.addEventListener('keydown', (evt) => {

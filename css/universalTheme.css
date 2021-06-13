@@ -29,4 +29,15 @@ td.fixWidth {
     width: 1px;
 }
 
+.unCapitalize {
+    text-transform: none !important;
+}
+
+.hide {
+    display: none;
+}
+.leftMargin {
+    margin-left: 25px;
+}
+
 

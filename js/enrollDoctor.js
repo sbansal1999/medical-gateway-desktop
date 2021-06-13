@@ -102,7 +102,7 @@ function submitForm() {
             dob: retrieveTextFromID('DOB'),
             id: generateDocID(),
             gender: getGender(),
-            speciality: retrieveTextFromID('#speciality'),
+            speciality: retrieveTextFromID('speciality'),
             available: getAvailable()
 
         }
