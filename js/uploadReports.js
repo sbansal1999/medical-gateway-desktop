@@ -7,7 +7,6 @@ const dbChild = 'patients_info';
 const sizeLimit = 1024 * 1024 * 20;
 
 function init() {
-    showToast("message");
     firebaseAdminInit();
     firebaseInit();
 

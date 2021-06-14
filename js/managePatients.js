@@ -1,13 +1,13 @@
 window.addEventListener('load', init);
 const require = parent.require;
+const firebase = require('firebase');
 const admin = require('firebase-admin');
 const dbChild = 'patients_info';
 const limitDB = 20;
 
-function firebaseInit() {
+function firebaseAdminInit() {
     let key = require('../assets/firebase-admin-private-key.json');
 
-    //Prevents Initializing of App more than once
     if (admin.apps.length === 0) {
         admin.initializeApp({
             credential: admin.credential.cert(key),
@@ -16,9 +16,42 @@ function firebaseInit() {
     }
 }
 
+/**
+ * Initializes Firebase Settings
+ */
+function firebaseInit() {
+    require('firebase/auth');
+    require('firebase/database');
+    require('firebase/functions');
+    require('firebase/storage');
+
+
+    const firebaseConfig = {
+        //DO NOT CHANGE
+        apiKey: "AIzaSyBo4fQjML7eJWQjBHYHP1Sy6OIT35DuuDo",
+        authDomain: "medical-gateway-296507.firebaseapp.com",
+        databaseURL: "https://medical-gateway-296507.firebaseio.com",
+        projectId: "medical-gateway-296507",
+        storageBucket: "medical-gateway-296507.appspot.com",
+        messagingSenderId: "139008948636",
+        appId: "1:139008948636:web:fe2fac7fca006a616a3059",
+        measurementId: "G-F17P54B7N4"
+    };
+
+    if (firebase.apps.length === 0)
+        firebase.initializeApp(firebaseConfig);
+}
+
 function init() {
+    firebaseAdminInit();
     firebaseInit();
     fillData();
+
+    document.querySelector('#searchBy').onchange = () => {
+        if (document.querySelector('#searchBy').value === "In Date") {
+            showToast("Kindly Enter the Date in DD/MM/YYYY");
+        }
+    };
 
     document.querySelector("#searchButton")
             .addEventListener('click', searchPatients);
@@ -26,12 +59,103 @@ function init() {
     document.querySelector("#refreshButton")
             .addEventListener('click', fillData);
 
+    document.querySelector('#dischargePatients')
+            .addEventListener('click', dischargePatients);
+
+    const allCheckBox = document.querySelector('#selectAllCheckBox');
+    allCheckBox.addEventListener('click', () => {
+        if (allCheckBox.checked) {
+            setAllCheckBoxes(true);
+        } else {
+            setAllCheckBoxes(false);
+        }
+    });
+
     window.addEventListener('keydown', (evt) => {
         if (evt.key === 'Enter') {
             searchPatients();
         }
     });
+}
 
+function dischargePatients() {
+
+    const selectedCheckBoxes = getSelectedCheckBoxes();
+
+    if (selectedCheckBoxes.length === 0) {
+        showToast("No Patient Selected");
+    } else {
+        let idArray = [];
+        showToast("Discharging Patients...");
+
+        selectedCheckBoxes.forEach((index) => {
+            const elm = document.querySelector('#pId' + index);
+            idArray.push(elm.innerHTML);
+        });
+
+        const date = new Date();
+        const dischargeDate = date.getUTCDate() + '-' + date.getUTCMonth() + '-' + date.getUTCFullYear();
+
+        const rootRef = firebase.database()
+                                .ref();
+
+        let allDischarged = true;
+
+        idArray.forEach((index) => {
+            rootRef.child(dbChild)
+                   .orderByChild('patientID')
+                   .equalTo(index)
+                   .once('value')
+                   .then((snapshot) => {
+                       snapshot.forEach((snap) => {
+                           if (!snap.hasChild('dischargeDate')) {
+                               snap.ref.update({
+                                   dischargeDate: dischargeDate,
+                               })
+                                   .then(() => {
+                                       showToast("Selected Patients have been Successfully Discharged");
+                                   });
+                           } else {
+                               allDischarged = false;
+                           }
+                       });
+                   });
+        });
+
+        uncheckBoxes();
+    }
+
+    function uncheckBoxes() {
+        const tableBody = document.querySelector('#todayTableTBody');
+        const rowNum = tableBody.rows.length;
+
+        for (let i = 1; i <= rowNum; i++) {
+            document.querySelector('#checkboxRow' + i).checked = false;
+        }
+    }
+
+    function getSelectedCheckBoxes() {
+        let selectedArray = [];
+        const tableBody = document.querySelector('#todayTableTBody');
+        const rowNum = tableBody.rows.length;
+
+        for (let i = 1; i <= rowNum; i++) {
+            if (document.querySelector('#checkboxRow' + i).checked === true) {
+                selectedArray.push(i);
+            }
+        }
+        return selectedArray;
+    }
+
+}
+
+function setAllCheckBoxes(state) {
+    const tableBody = document.querySelector('#todayTableTBody');
+    const rowNum = tableBody.rows.length;
+
+    for (let i = 1; i <= rowNum; i++) {
+        document.querySelector('#checkboxRow' + i).checked = state;
+    }
 }
 
 function getIdFromDate(query) {
@@ -138,7 +262,11 @@ function fillData() {
            .then((snapshot) => {
                if (snapshot.exists()) {
                    snapshot.forEach((snap) => {
-                       addDataToTable(snap.val());
+                       let discharged = false;
+                       if (snap.hasChild('dischargeDate')) {
+                           discharged = true;
+                       }
+                       addDataToTable(snap.val(), discharged);
                    });
                } else {
                }
@@ -153,16 +281,36 @@ function clearTable() {
     todayTable.innerHTML = '';
 }
 
-function addDataToTable(val) {
-    const todayTable = document.querySelector('#todayTableTBody');
+function addDataToTable(val, isDischarged) {
+    const tableBody = document.querySelector('#todayTableTBody');
 
-    todayTable.classList.remove('invisible');
+    tableBody.classList.remove('invisible');
 
-    let row = todayTable.insertRow(-1);
-    row.insertCell(0).innerHTML = val.patientID;
-    row.insertCell(1).innerHTML = val.name;
-    row.insertCell(2).innerHTML = val.phone;
-    row.insertCell(3).innerHTML = val.residentialAddress;
+    let rowNum = tableBody.rows.length + 1;
+
+    let row = tableBody.insertRow(-1);
+    row.insertCell(0).innerHTML = '<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select" for="checkboxRow' + rowNum + '" >\n' +
+        '            <input type="checkbox" id="checkboxRow' + rowNum + '" class="mdl-checkbox__input" />\n' +
+        '          </label>';
+    row.insertCell(1).innerHTML = rowNum + '';
+    row.insertCell(2).innerHTML = val.patientID;
+    row.cells.item(2).id = 'pId' + rowNum;
+    row.insertCell(3).innerHTML = val.name;
+    row.insertCell(4).innerHTML = val.phone;
+    row.insertCell(5).innerHTML = val.residentialAddress;
+    // row.insertCell(6).innerHTML = '\u2717';
+
+    let discharged = "\u26cc";
+
+    if (isDischarged) {
+        discharged = "\u2714";
+        console.log(isDischarged);
+    }
+    row.insertCell(6).innerHTML = discharged;
+
+    // language=HTML
+    // const textToAdd = "<tr><td>" + (rowNum + '') + "</td><td>" + val.patientID + "</td><td class='mdl-data-table__cell--non-numeric'>" + val.name + "</td><td>" + val.phone + "</td><td>" + val.residentialAddress + "</td></tr>"
+    // todayTable.innerHTML += textToAdd;
 }
 
 function showToast(message) {

@@ -4,6 +4,10 @@ const admin = require('firebase-admin');
 const dbChild = 'patients_info';
 let imageCaptured = false;
 
+//File limit size of 500 KiloBytes
+const sizeLimit = 1024 * 500;
+let imageSelected = false;
+
 function firebaseInit() {
     let key = require('../assets/firebase-admin-private-key.json');
 
@@ -39,13 +43,18 @@ function init() {
 
     let inputElement = document.querySelector('#uploadImg');
     inputElement.onchange = function (evt) {
-        let fileList = inputElement.files;
-        document.querySelector('#output').src = URL.createObjectURL(fileList[0]);
+        let selectedFile = inputElement.files[0];
 
-        console.log(fileList[0].name);
-
+        if (selectedFile.size < sizeLimit) {
+            imageSelected = true;
+            document.querySelector('#output')
+                    .classList
+                    .remove('hide');
+            document.querySelector('#output').src = URL.createObjectURL(selectedFile);
+        } else {
+            showToast("Selected File Exceeds the File Limit of " + sizeLimit / 1024 + " KB");
+        }
     };
-
 
     window.addEventListener('keydown', (evt) => {
         if (evt.key === 'Enter') {
@@ -80,8 +89,11 @@ function submitForm() {
 function resetForm() {
     document.querySelector('#inputForm')
             .reset();
-    document.querySelector('#retakeImage')
-            .click();
+    document.querySelector('#output').src = '';
+    document.querySelector('#output')
+            .classList
+            .add('hide');
+
 
 }
 

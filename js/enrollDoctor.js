@@ -33,6 +33,9 @@ function init() {
         //Restricts the size of image that can be selected
         if (selectedFile.size < sizeLimit) {
             imageSelected = true;
+            document.querySelector('#output')
+                    .classList
+                    .remove('hide');
             document.querySelector('#output').src = URL.createObjectURL(selectedFile);
         } else {
             showToast("Selected File Exceeds the File Limit of " + sizeLimit / 1024 + " KB");
@@ -298,6 +301,11 @@ function showToast(message) {
 function resetForm() {
     document.querySelector('#inputForm')
             .reset();
+    document.querySelector('#output').src = '';
+    document.querySelector('#output')
+            .classList
+            .add('hide');
+
 }
 
 function getAvailable() {
