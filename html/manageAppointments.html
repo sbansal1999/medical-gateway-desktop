@@ -33,28 +33,33 @@
 <body class="defaultMargin">
     <div class="text-center form-group">
         <label for="searchBy"> Search By: </label>
-        <select class="form-control inline" id="searchBy" style="width: 250px">
+        <select class="form-control inline" id="searchBy" style="width: 200px">
             <option>Patient ID</option>
             <option>Appointment Date</option>
             <option>Preferred Doctor</option>
             <option>Current Status</option>
         </select>
-        <!-- Simple Textfield -->
+
         <form action="#" class="inline defaultMargin">
             <div class="mdl-textfield mdl-js-textfield">
                 <input class="mdl-textfield__input" id="searchQuery" type="text">
                 <label class="mdl-textfield__label" for="searchQuery">Enter Here</label>
             </div>
         </form>
-        <!-- Accent-colored raised button with ripple -->
+
         <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent unCapitalize defaultMargin"
                 id="searchButton">
             Search
         </button>
 
-        <!-- Flat button with ripple -->
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect unCapitalize" id="refreshButton">
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect unCapitalize"
+                id="refreshButton">
             Refresh
+        </button>
+
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent defaultMargin unCapitalize"
+                id="changeStatus">
+            Change Status
         </button>
 
     </div>
@@ -62,6 +67,13 @@
     <table class="table defaultMargin" id="todayTable">
         <thead>
             <tr>
+                <th>
+                    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select"
+                           for="selectAllCheckBox">
+                        <input class="mdl-checkbox__input" id="selectAllCheckBox" type="checkbox"/>
+                    </label>
+                </th>
+                <th scope="col">#</th>
                 <th scope="col">Patient ID</th>
                 <th scope="col">Appointment Date</th>
                 <th scope="col">Preferred Doctor</th>

@@ -272,7 +272,7 @@ function fillData() {
                }
            })
            .catch((err) => {
-
+               showToast("Contact Support");
            });
 }
 
@@ -298,7 +298,6 @@ function addDataToTable(val, isDischarged) {
     row.insertCell(3).innerHTML = val.name;
     row.insertCell(4).innerHTML = val.phone;
     row.insertCell(5).innerHTML = val.residentialAddress;
-    // row.insertCell(6).innerHTML = '\u2717';
 
     let discharged = "\u26cc";
 
@@ -308,9 +307,6 @@ function addDataToTable(val, isDischarged) {
     }
     row.insertCell(6).innerHTML = discharged;
 
-    // language=HTML
-    // const textToAdd = "<tr><td>" + (rowNum + '') + "</td><td>" + val.patientID + "</td><td class='mdl-data-table__cell--non-numeric'>" + val.name + "</td><td>" + val.phone + "</td><td>" + val.residentialAddress + "</td></tr>"
-    // todayTable.innerHTML += textToAdd;
 }
 
 function showToast(message) {
