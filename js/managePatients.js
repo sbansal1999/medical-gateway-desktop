@@ -273,6 +273,7 @@ function fillData() {
            })
            .catch((err) => {
                showToast("Contact Support");
+               console.log(err);
            });
 }
 
