@@ -169,9 +169,8 @@ function addMed(medDetails, id) {
          .once('value')
          .then((snap) => {
              if (snap.exists()) {
-                 showToast("Medicine is Already Added");
+                 showToast("Medicine with Same ID is Already Added");
              } else {
-
                  uploadImg(id);
                  addIntoDatabase(medDetails, id);
              }

@@ -216,7 +216,7 @@ function addPatient(details) {
          .once('value')
          .then((snapshot) => {
                  if (snapshot.exists()) {
-                     showToast("Email Already Registered 1");
+                     showToast("Email ID Already Registered");
                  } else {
                      admin.auth()
                           .createUser({
@@ -230,7 +230,7 @@ function addPatient(details) {
                           .catch((error) => {
                               switch (error.code) {
                                   case "auth/email-already-exists":
-                                      showToast("Email Already Registered");
+                                      showToast("Email ID Already Registered");
                                       break;
                                   case "auth/phone-number-already-exists":
                                       showToast("Mobile Number Already Registered");

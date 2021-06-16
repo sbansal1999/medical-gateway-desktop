@@ -191,6 +191,7 @@ function searchPatients() {
             break;
         case 'Appointment Date':
             key = 'dateAppoint';
+            query = query.replaceAll('/', '-');
             break;
         case 'Preferred Doctor':
             key = 'prefDoctor';
@@ -277,7 +278,7 @@ function addDataToTable(val) {
     row.insertCell(1).innerHTML = rowNum + '';
     row.insertCell(2).innerHTML = val.patientID;
     row.cells.item(2).id = 'pId' + rowNum;
-    row.insertCell(3).innerHTML = val.dateAppoint;
+    row.insertCell(3).innerHTML = val.dateAppoint.replaceAll('-', '/');
     row.insertCell(4).innerHTML = val.prefDoctor;
 
     let currentStat = val.appointmentFulfilled;
