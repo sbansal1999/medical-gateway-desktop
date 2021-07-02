@@ -22,6 +22,7 @@ function firebaseInit() {
 function init() {
     firebaseInit();
     fetchTodayList();
+    fillCurrentDoc();
 
     //TODO add max date to today in datepicker
     document.querySelector('#register')
@@ -42,7 +43,7 @@ function init() {
             });
 
     let inputElement = document.querySelector('#uploadImg');
-    inputElement.onchange = function (evt) {
+    inputElement.onchange = function () {
         let selectedFile = inputElement.files[0];
 
         if (selectedFile.size < sizeLimit) {
@@ -65,6 +66,24 @@ function init() {
 
 }
 
+function fillCurrentDoc() {
+    const list = document.querySelector('#currentDoc');
+
+    admin.database()
+         .ref('doctors_info')
+         .once('value')
+         .then((snapshot) => {
+             if (snapshot.exists()) {
+                 snapshot.forEach((snap) => {
+                     let opt = document.createElement("option");
+                     opt.text = snap.child('name')
+                                    .val();
+                     list.add(opt);
+                 });
+             }
+         });
+}
+
 function submitForm() {
     showToast("Registering");
 
@@ -81,7 +100,7 @@ function submitForm() {
             address: retrieveTextFromID('pAddress'),
             dob: retrieveTextFromID('pDOB'),
             id: generatePatientID(),
-
+            currentDoc: retrieveTextFromID('currentDoc'),
         }
     }
 }
@@ -141,7 +160,7 @@ function fetchTodayList() {
 
                }
            })
-           .catch((err) => {
+           .catch(() => {
 
            });
 
@@ -249,7 +268,7 @@ function addPatient(details) {
                  }
              }
          )
-         .catch((error) => {
+         .catch(() => {
              showToast("Some error occurred. Contact Support for more info");
          });
 
@@ -286,7 +305,7 @@ function addIntoDatabase(data, uid) {
         showToast("Patient Added Successfully");
         fetchTodayList();
     })
-        .catch((error) => {
+        .catch(() => {
             showToast("Some error occurred. Contact Support for more info");
         })
 

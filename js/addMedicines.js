@@ -2,7 +2,6 @@ window.addEventListener('load', init);
 const require = parent.require;
 const admin = require('firebase-admin');
 const firebase = require('firebase');
-const {ipcRenderer} = require('electron');
 const dbChild = 'medicine_info';
 
 //File limit size of 500 KiloBytes
@@ -16,20 +15,34 @@ function init() {
 
     document.querySelector('#addMedicine')
             .addEventListener('click', (() => {
+                setLoadingVisible(true);
+
                 let isValid = document.querySelector('#inputForm')
                                       .checkValidity();
+                let idError = false;
+                if (retrieveTextFromID('medID')
+                .trim().length !== 6) {
+                    isValid = false;
+                    idError = true;
+                    showToast("ID should have only 5 numbers");
+                }
+
                 if (isValid === true && imageSelected === true) {
                     submitForm();
                 } else if (imageSelected !== true) {
-                    showToast("Kindly Upload an Image First")
+                    setLoadingVisible(false);
+                    showToast("Kindly Upload an Image First");
                 } else {
-                    showToast("Kindly fill the form completely");
+                    if (idError === false) {
+                        showToast("Kindly fill the form completely");
+                        setLoadingVisible(false);
+                    }
                     //TODO add some possible exceptions here
                 }
             }));
 
     let inputElement = document.querySelector('#uploadImg');
-    inputElement.onchange = function (evt) {
+    inputElement.onchange = function () {
         let selectedFile = inputElement.files[0];
 
         //Restricts the size of image that can be selected
@@ -154,11 +167,11 @@ function addIntoDatabase(data, id) {
     snap.then(() => {
         showToast("Medicine Added Successfully");
     })
-        .catch((err) => {
+        .catch(() => {
             showToast("Error Occurred");
         });
 
-
+    setLoadingVisible(false);
 }
 
 function addMed(medDetails, id) {
@@ -170,6 +183,7 @@ function addMed(medDetails, id) {
          .then((snap) => {
              if (snap.exists()) {
                  showToast("Medicine with Same ID is Already Added");
+                 setLoadingVisible(false);
              } else {
                  uploadImg(id);
                  addIntoDatabase(medDetails, id);
@@ -199,6 +213,15 @@ function addMed(medDetails, id) {
     //
     // }
 
+}
+
+function setLoadingVisible(visibility) {
+    let loading = document.querySelector('#spinner');
+    if (visibility === true) {
+        loading.classList.add('is-active');
+    } else {
+        loading.classList.remove('is-active')
+    }
 }
 
 /**

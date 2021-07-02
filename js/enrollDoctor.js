@@ -27,7 +27,7 @@ function init() {
             }));
 
     let inputElement = document.querySelector('#uploadImg');
-    inputElement.onchange = function (evt) {
+    inputElement.onchange = function () {
         let selectedFile = inputElement.files[0];
 
         //Restricts the size of image that can be selected
@@ -165,7 +165,7 @@ function addDoc(details) {
                  }
              }
          )
-         .catch((error) => {
+         .catch(() => {
              showToast("Some Error Occurred");
          });
 }
@@ -203,7 +203,7 @@ function addIntoDatabase(data, uid) {
     snap.then(() => {
         showToast("Doctor Enrolled Successfully");
     })
-        .catch((error) => {
+        .catch(() => {
             showToast("Some error occurred. Contact Support for more info");
         });
 }
@@ -252,6 +252,16 @@ function uploadImg(uid) {
                                     console.log("url");
                                     console.log(snap);
 
+                                    admin.auth()
+                                         .updateUser(uid, {photoURL: snap,})
+                                         .then(() => {
+                                             console.log("user updated success");
+                                         })
+                                         .catch((err) => {
+                                             console.log(err);
+                                             console.log("error in update");
+                                         });
+
                                     const rootRef = firebase.database()
                                                             .ref();
                                     rootRef.child(dbChild)
@@ -265,12 +275,12 @@ function uploadImg(uid) {
 
                                     return snap;
                                 })
-                                .catch((err) => {
+                                .catch(() => {
                                 });
 
                           console.log("File Uploaded Successfully");
                       })
-                      .catch((err) => {
+                      .catch(() => {
                           console.log("Error");
                       });
 

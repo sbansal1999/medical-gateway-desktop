@@ -28,9 +28,9 @@
     <link href="../css/addPatients.css" rel="stylesheet">
 
     <script defer src="../js/addPatients.js"></script>
+
 </head>
 <body>
-
     <h3 class="defaultMargin" id="heading">Patient Registration</h3>
     <!--    TODO get this in center for big screens-->
     <div>
@@ -59,7 +59,8 @@
                         </td>
                         <td rowspan="4">
                             <span class="secondCol">
-                                <img class="hide" id="output" src="http://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif"
+                                <img class="hide" id="output"
+                                     src="http://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif"
                                      style="width: 400px;height: 250px">
                                 <br>
                                 <br>
@@ -85,7 +86,7 @@
                             <span class="secondCol">
                                 <span>Date Of Birth</span>
                                 <div class="mdl-textfield mdl-js-textfield">
-                                    <input id="pDOB" type="date" min="1900-01-01">
+                                    <input id="pDOB" min="1900-01-01" type="date">
                                 </div>
                             </span>
                         </td>
@@ -101,6 +102,16 @@
                             </span>
                         </td>
                         <td class="fixWidth">
+                            <span class="secondCol">
+                                <div class="mdl-textfield mdl-js-textfield ">
+                                    <label for="currentDoc">Current Doctor</label>
+                                <br>
+                                    <select class="form-control-inline" id="currentDoc" style="width: 150px;">
+                                    <option>Select Doctor</option>
+                                    </select>
+                                </div>
+                            </span>
+                        </td>
                     </tr>
                 </table>
             </span>
