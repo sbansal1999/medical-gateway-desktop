@@ -54,13 +54,13 @@ function init() {
     };
 
     document.querySelector("#searchButton")
-            .addEventListener('click', searchPatients);
+        .addEventListener('click', searchPatients);
 
     document.querySelector("#refreshButton")
-            .addEventListener('click', fillData);
+        .addEventListener('click', fillData);
 
     document.querySelector('#dischargePatients')
-            .addEventListener('click', dischargePatients);
+        .addEventListener('click', dischargePatients);
 
     const allCheckBox = document.querySelector('#selectAllCheckBox');
     allCheckBox.addEventListener('click', () => {
@@ -97,29 +97,29 @@ function dischargePatients() {
         const dischargeDate = date.getUTCDate() + '-' + date.getUTCMonth() + '-' + date.getUTCFullYear();
 
         const rootRef = firebase.database()
-                                .ref();
+            .ref();
 
         let allDischarged = true;
 
         idArray.forEach((index) => {
             rootRef.child(dbChild)
-                   .orderByChild('patientID')
-                   .equalTo(index)
-                   .once('value')
-                   .then((snapshot) => {
-                       snapshot.forEach((snap) => {
-                           if (!snap.hasChild('dischargeDate')) {
-                               snap.ref.update({
-                                   dischargeDate: dischargeDate,
-                               })
-                                   .then(() => {
-                                       showToast("Selected Patients have been Successfully Discharged");
-                                   });
-                           } else {
-                               allDischarged = false;
-                           }
-                       });
-                   });
+                .orderByChild('patientID')
+                .equalTo(index)
+                .once('value')
+                .then((snapshot) => {
+                    snapshot.forEach((snap) => {
+                        if (!snap.hasChild('dischargeDate')) {
+                            snap.ref.update({
+                                dischargeDate: dischargeDate,
+                            })
+                                .then(() => {
+                                    showToast("Selected Patients have been Successfully Discharged");
+                                });
+                        } else {
+                            allDischarged = false;
+                        }
+                    });
+                });
         });
 
         uncheckBoxes();
@@ -198,7 +198,7 @@ function searchPatients() {
     }
 
     const rootRef = admin.database()
-                         .ref();
+        .ref();
 
     clearTable();
 
@@ -208,42 +208,42 @@ function searchPatients() {
             key = 'patientID';
         }
         rootRef.child(dbChild)
-               .orderByChild(key)
-               .startAt(query)
-               .endAt(query + '\uf8ff')
-               .limitToFirst(limitDB)
-               .once('value')
-               .then((snapshot) => {
-                   if (snapshot.exists()) {
-                       snapshot.forEach((snap) => {
-                           addDataToTable(snap.val());
-                       });
-                   } else {
-                       showToast("No Patient Found");
-                   }
-               })
-               .catch((err) => {
-                   console.log(err);
-               });
+            .orderByChild(key)
+            .startAt(query)
+            .endAt(query + '\uf8ff')
+            .limitToFirst(limitDB)
+            .once('value')
+            .then((snapshot) => {
+                if (snapshot.exists()) {
+                    snapshot.forEach((snap) => {
+                        addDataToTable(snap.val());
+                    });
+                } else {
+                    showToast("No Patient Found");
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     } else {
         rootRef.child(dbChild)
-               .orderByChild(key)
-               .equalTo(query)
-               .limitToFirst(limitDB)
-               .once('value')
-               .then((snapshot) => {
-                   if (snapshot.exists()) {
-                       snapshot.forEach((snap) => {
-                           addDataToTable(snap.val());
-                       });
-                   } else {
-                       showToast("No Patient Found");
-                   }
-               })
-               .catch
-               ((err) => {
-                   console.log(err);
-               });
+            .orderByChild(key)
+            .equalTo(query)
+            .limitToFirst(limitDB)
+            .once('value')
+            .then((snapshot) => {
+                if (snapshot.exists()) {
+                    snapshot.forEach((snap) => {
+                        addDataToTable(snap.val());
+                    });
+                } else {
+                    showToast("No Patient Found");
+                }
+            })
+            .catch
+            ((err) => {
+                console.log(err);
+            });
     }
 
 
@@ -254,27 +254,27 @@ function fillData() {
     clearTable();
 
     const rootRef = admin.database()
-                         .ref();
+        .ref();
 
     rootRef.child('patients_info')
-           .limitToFirst(limitDB)
-           .once('value')
-           .then((snapshot) => {
-               if (snapshot.exists()) {
-                   snapshot.forEach((snap) => {
-                       let discharged = false;
-                       if (snap.hasChild('dischargeDate')) {
-                           discharged = true;
-                       }
-                       addDataToTable(snap.val(), discharged);
-                   });
-               } else {
-               }
-           })
-           .catch((err) => {
-               showToast("Contact Support");
-               console.log(err);
-           });
+        .limitToFirst(limitDB)
+        .once('value')
+        .then((snapshot) => {
+            if (snapshot.exists()) {
+                snapshot.forEach((snap) => {
+                    let discharged = false;
+                    if (snap.hasChild('dischargeDate')) {
+                        discharged = true;
+                    }
+                    addDataToTable(snap.val(), discharged);
+                });
+            } else {
+            }
+        })
+        .catch((err) => {
+            showToast("Contact Support");
+            console.log(err);
+        });
 }
 
 function clearTable() {

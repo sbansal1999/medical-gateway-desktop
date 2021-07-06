@@ -29,41 +29,48 @@
 </head>
 <body>
 
-    <div class="text-center">
-        <div class="mdl-textfield mdl-js-textfield">
-            <input class="mdl-textfield__input" id="patientID" type="text">
-            <label class="mdl-textfield__label" for="patientID">Enter Patient ID</label>
-        </div>
-
-        <span class="leftMargin">Report Date</span>
-        <div class="mdl-textfield mdl-js-textfield">
-            <input class="mdl-textfield__input" id="reportDate" type="date">
-            <label class="mdl-textfield__label" for="reportDate"> </label>
-        </div>
-
-        <label class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect unCapitalize defaultMargin"
-               for="selectReport">Select Report</label>
-        <input accept="application/pdf" class="invisible" id="selectReport" name="selectReport" style="display: none"
-               type="file">
-
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent unCapitalize defaultMargin"
-                id="uploadReport">
-            Upload Report
-        </button>
+<div class="text-center">
+    <div class="mdl-textfield mdl-js-textfield">
+        <input class="mdl-textfield__input" id="patientID" type="text">
+        <label class="mdl-textfield__label" for="patientID">Enter Patient ID</label>
     </div>
 
-
-    <div class="text-center">
-        <p id="heading" style="font-size: 30px">Selected Report Appears Here</p>
-        <!--        TODO try making this iframe's height not hardcoded-->
-        <iframe height="675px" id="pdfHolder"></iframe>
-
+    <span class="leftMargin">Report Date</span>
+    <div class="mdl-textfield mdl-js-textfield">
+        <input class="mdl-textfield__input" id="reportDate" type="date">
+        <label class="mdl-textfield__label" for="reportDate"> </label>
     </div>
 
-    <div aria-atomic="true" aria-live="assertive" aria-relevant="text" class="mdl-snackbar mdl-js-snackbar">
-        <div class="mdl-snackbar__text"></div>
-        <button class="mdl-snackbar__action" type="button"></button>
-    </div>
+    <label class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect unCapitalize defaultMargin"
+           for="selectReport">Select Report</label>
+    <input accept="application/pdf" class="invisible" id="selectReport" name="selectReport" style="display: none"
+           type="file">
+
+    <button
+            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent unCapitalize defaultMargin"
+            id="uploadReport">
+        Upload Report
+    </button>
+
+    <button
+            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect unCapitalize defaultMargin"
+            id="clear">
+        Clear
+    </button>
+</div>
+
+
+<div class="text-center">
+    <p id="heading" style="font-size: 30px">Selected Report Appears Here</p>
+    <!--        TODO try making this iframe's height not hardcoded-->
+    <iframe height="675px" id="pdfHolder"></iframe>
+
+</div>
+
+<div aria-atomic="true" aria-live="assertive" aria-relevant="text" class="mdl-snackbar mdl-js-snackbar">
+    <div class="mdl-snackbar__text"></div>
+    <button class="mdl-snackbar__action" type="button"></button>
+</div>
 
 
 </body>

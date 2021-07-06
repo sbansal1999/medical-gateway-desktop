@@ -2,6 +2,7 @@ const {app, BrowserWindow, ipcMain, Menu} = require('electron');
 const isMac = process.platform === "darwin";
 
 const path = require('path');
+const fs = require('fs');
 
 function createWindow() {
     const window = new BrowserWindow({
@@ -14,27 +15,57 @@ function createWindow() {
         resizable: false
     });
 
-    // //Creating Custom Menu
-    // const template = Menu.buildFromTemplate([{
-    //     label: 'Manage',
-    //     submenu: [
-    //         {label: 'Logout'},
-    //         {label: 'Exit'},
-    //     ]
-    // }])
-    //
-    // Menu.setApplicationMenu(template);
+    //Creating Custom Menu
+    const template = Menu.buildFromTemplate([{
+        label: 'Manage',
+        submenu: [
+            {
+                label: 'Logout', id: 'logout', click() {
+
+                    const dir = path.resolve();
+                    const filePath = path.join(dir + '/assets/login');
+
+                    fs.unlink(filePath, (err) => {
+                        if (err) {
+                            console.log(err);
+                        }
+                        const htmlPath = path.join('file://', __dirname, 'html/mainWindow.html');
+
+                        window.loadURL(htmlPath)
+                            .then();
+                        window.show();
+                    });
+                }
+            },
+            {
+                label: 'Exit', click() {
+                    app.quit();
+                }
+            },
+        ]
+    }]);
+
+    Menu.setApplicationMenu(template);
+
+    // const dir = path.resolve();
+    // const filePath = path.join(dir + '/assets/login');
+    // try{
+    //     fs.readFileSync(filePath, 'utf-8')
+    // } catch (err) {
+    //     Menu.getApplicationMenu().getMenuItemById('logout').enabled = false;
+    // }
+
 
     const htmlPath = path.join('file://', __dirname, 'html/mainWindow.html');
 
     window.loadURL(htmlPath)
-           .then();
+        .then();
     window.show();
 
 }
 
 app.whenReady()
-   .then(createWindow);
+    .then(createWindow);
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
@@ -58,15 +89,15 @@ ipcMain.handle('show-dialog', async (event, options) => {
     let result;
 
     await dialog.showMessageBox(options)
-                .then((r) => {
-                    result = r.response;
-                });
+        .then((r) => {
+            result = r.response;
+        });
     return result;
 });
 
 ipcMain.handle('firebase-auth', () => {
     return require('firebase')
-    .auth();
+        .auth();
 });
 
 //TODO remove this, its for hot reloading

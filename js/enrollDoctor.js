@@ -13,18 +13,18 @@ function init() {
     firebaseInit();
 
     document.querySelector('#enroll')
-            .addEventListener('click', (() => {
-                let isValid = document.querySelector('#inputForm')
-                                      .checkValidity();
-                if (isValid === true && imageSelected === true) {
-                    submitForm();
-                } else if (imageSelected !== true) {
-                    showToast("Kindly Upload an Image First")
-                } else {
-                    showToast("Kindly fill the form completely");
-                    //TODO add some possible exceptions here
-                }
-            }));
+        .addEventListener('click', (() => {
+            let isValid = document.querySelector('#inputForm')
+                .checkValidity();
+            if (isValid === true && imageSelected === true) {
+                submitForm();
+            } else if (imageSelected !== true) {
+                showToast("Kindly Upload an Image First")
+            } else {
+                showToast("Kindly fill the form completely");
+                //TODO add some possible exceptions here
+            }
+        }));
 
     let inputElement = document.querySelector('#uploadImg');
     inputElement.onchange = function () {
@@ -34,8 +34,8 @@ function init() {
         if (selectedFile.size < sizeLimit) {
             imageSelected = true;
             document.querySelector('#output')
-                    .classList
-                    .remove('hide');
+                .classList
+                .remove('hide');
             document.querySelector('#output').src = URL.createObjectURL(selectedFile);
         } else {
             showToast("Selected File Exceeds the File Limit of " + sizeLimit / 1024 + " KB");
@@ -43,9 +43,9 @@ function init() {
     };
 
     document.querySelector('#reset')
-            .addEventListener('click', () => {
-                resetForm();
-            });
+        .addEventListener('click', () => {
+            resetForm();
+        });
 
     //TODO add keypress event on Enter
 }
@@ -120,54 +120,54 @@ function addDoc(details) {
     //Performs Email Check
 
     admin.database()
-         .ref(dbChild)
-         .orderByChild('emailAddress')
-         .equalTo(details.email)
-         .once('value')
-         .then((snapshot) => {
-                 if (snapshot.exists()) {
-                     showToast("Email Already Registered 1");
-                 } else {
-                     admin.auth()
-                          .createUser({
-                              email: details.email,
-                              phoneNumber: "+91" + details.phoneNum,
-                              displayName: details.displayName,
-                          })
-                          .then((user) => {
-                              const imgURL = uploadImg(user.uid);
-                              if (imgURL !== null) {
-                                  user.photoURL = imgURL;
-                              }
+        .ref(dbChild)
+        .orderByChild('emailAddress')
+        .equalTo(details.email)
+        .once('value')
+        .then((snapshot) => {
+                if (snapshot.exists()) {
+                    showToast("Email Already Registered 1");
+                } else {
+                    admin.auth()
+                        .createUser({
+                            email: details.email,
+                            phoneNumber: "+91" + details.phoneNum,
+                            displayName: details.displayName,
+                        })
+                        .then((user) => {
+                            const imgURL = uploadImg(user.uid);
+                            if (imgURL !== null) {
+                                user.photoURL = imgURL;
+                            }
 
-                              addIntoDatabase(details, user.uid);
-                          })
-                          .catch((error) => {
-                              switch (error.code) {
-                                  case "auth/email-already-exists":
-                                      showToast("Email Already Registered");
-                                      break;
-                                  case "auth/phone-number-already-exists":
-                                      showToast("Mobile Number Already Registered");
-                                      break;
-                                  case "auth/invalid-phone-number":
-                                      showToast("Kindly recheck the Mobile Number");
-                                      break;
-                                  case "auth/invalid-email":
-                                      showToast("Kindly recheck the Email Address");
-                                      break;
-                                  default:
-                                      showToast("Something has gone wrong. Contact Support");
-                                      console.log(error.code);
-                                      break;
-                              }
-                          });
-                 }
-             }
-         )
-         .catch(() => {
-             showToast("Some Error Occurred");
-         });
+                            addIntoDatabase(details, user.uid);
+                        })
+                        .catch((error) => {
+                            switch (error.code) {
+                                case "auth/email-already-exists":
+                                    showToast("Email Already Registered");
+                                    break;
+                                case "auth/phone-number-already-exists":
+                                    showToast("Mobile Number Already Registered");
+                                    break;
+                                case "auth/invalid-phone-number":
+                                    showToast("Kindly recheck the Mobile Number");
+                                    break;
+                                case "auth/invalid-email":
+                                    showToast("Kindly recheck the Email Address");
+                                    break;
+                                default:
+                                    showToast("Something has gone wrong. Contact Support");
+                                    console.log(error.code);
+                                    break;
+                            }
+                        });
+                }
+            }
+        )
+        .catch(() => {
+            showToast("Some Error Occurred");
+        });
 }
 
 /**
@@ -195,10 +195,10 @@ function addIntoDatabase(data, uid) {
     };
 
     const dbRef = admin.database()
-                       .ref(dbChild);
+        .ref(dbChild);
 
     const snap = dbRef.child(uid)
-                      .set(obj);
+        .set(obj);
 
     snap.then(() => {
         showToast("Doctor Enrolled Successfully");
@@ -230,59 +230,59 @@ function uploadImg(uid) {
                 console.log("error in fs");
             } else {
                 const strRef = firebase.storage()
-                                       .ref()
-                                       .child(uid)
-                                       .child('profile_pic.jpg');
+                    .ref()
+                    .child(uid)
+                    .child('profile_pic.jpg');
 
                 const metaData = {
                     contentType: 'image/jpeg'
                 };
 
                 strRef.put(data)
-                      .then(() => {
+                    .then(() => {
 
-                          strRef.updateMetadata(metaData)
-                                .then(() => {
-                                    console.log('updated');
-                                });
+                        strRef.updateMetadata(metaData)
+                            .then(() => {
+                                console.log('updated');
+                            });
 
-                          //Add photo url to DB for fetching in the android app
-                          strRef.getDownloadURL()
-                                .then((snap) => {
-                                    console.log("url");
-                                    console.log(snap);
+                        //Add photo url to DB for fetching in the android app
+                        strRef.getDownloadURL()
+                            .then((snap) => {
+                                console.log("url");
+                                console.log(snap);
 
-                                    admin.auth()
-                                         .updateUser(uid, {photoURL: snap,})
-                                         .then(() => {
-                                             console.log("user updated success");
-                                         })
-                                         .catch((err) => {
-                                             console.log(err);
-                                             console.log("error in update");
-                                         });
+                                admin.auth()
+                                    .updateUser(uid, {photoURL: snap,})
+                                    .then(() => {
+                                        console.log("user updated success");
+                                    })
+                                    .catch((err) => {
+                                        console.log(err);
+                                        console.log("error in update");
+                                    });
 
-                                    const rootRef = firebase.database()
-                                                            .ref();
-                                    rootRef.child(dbChild)
-                                           .child(uid)
-                                           .update({
-                                               photoURL: snap,
-                                           })
-                                           .then(() => {
+                                const rootRef = firebase.database()
+                                    .ref();
+                                rootRef.child(dbChild)
+                                    .child(uid)
+                                    .update({
+                                        photoURL: snap,
+                                    })
+                                    .then(() => {
 
-                                           });
+                                    });
 
-                                    return snap;
-                                })
-                                .catch(() => {
-                                });
+                                return snap;
+                            })
+                            .catch(() => {
+                            });
 
-                          console.log("File Uploaded Successfully");
-                      })
-                      .catch(() => {
-                          console.log("Error");
-                      });
+                        console.log("File Uploaded Successfully");
+                    })
+                    .catch(() => {
+                        console.log("Error");
+                    });
 
 
             }
@@ -310,11 +310,11 @@ function showToast(message) {
 
 function resetForm() {
     document.querySelector('#inputForm')
-            .reset();
+        .reset();
     document.querySelector('#output').src = '';
     document.querySelector('#output')
-            .classList
-            .add('hide');
+        .classList
+        .add('hide');
 
 }
 
@@ -344,8 +344,8 @@ function generateDocID() {
 
     //Adds last 2 digits of the year
     id += now.getUTCFullYear()
-             .toString()
-             .substr(-2);
+        .toString()
+        .substr(-2);
 
     //Month starts from 0
     let month = now.getUTCMonth() + 1;

@@ -13,9 +13,9 @@ function init() {
     let inputElement = document.querySelector('#selectReport');
     let reportSelected = false;
     document.querySelector('#selectReport')
-            .addEventListener('click', () => {
-                inputElement.click();
-            });
+        .addEventListener('click', () => {
+            inputElement.click();
+        });
 
     inputElement.onchange = function () {
         let selectedFile = inputElement.files[0];
@@ -23,8 +23,8 @@ function init() {
         if (selectedFile.size < sizeLimit) {
             reportSelected = true;
             document.querySelector('#heading')
-                    .classList
-                    .add('hide');
+                .classList
+                .add('hide');
             document.querySelector('#pdfHolder').src = selectedFile.path;
         } else {
             showToast("Selected File Exceeds the File Limit of " + sizeLimit / (1024 * 1024) + " MB");
@@ -32,10 +32,14 @@ function init() {
     };
 
     document.querySelector('#uploadReport')
-            .addEventListener('click', () => {
-                console.log(reportSelected);
-                uploadReport(reportSelected);
-            });
+        .addEventListener('click', () => {
+            console.log(reportSelected);
+            uploadReport(reportSelected);
+        });
+
+    document.querySelector('#clear').addEventListener('click', () => {
+        location.reload();
+    });
 
 }
 
@@ -43,8 +47,8 @@ function uploadReport(fileSelected) {
     if (fileSelected === true) {
         showToast("Uploading Report");
         const patientID = document.querySelector('#patientID')
-                                  .value
-                                  .trim();
+            .value
+            .trim();
         const date = document.querySelector('#reportDate').value;
 
         if (patientID !== '' && date !== '') {
@@ -60,60 +64,60 @@ function uploadReport(fileSelected) {
                         console.log(err);
                     } else {
                         const rootRef = firebase.database()
-                                                .ref();
+                            .ref();
 
                         rootRef.child(dbChild)
-                               .orderByChild('patientID')
-                               .equalTo(patientID)
-                               .once('value')
-                               .then((snapshot) => {
-                                   if (snapshot.exists()) {
-                                       let uid;
+                            .orderByChild('patientID')
+                            .equalTo(patientID)
+                            .once('value')
+                            .then((snapshot) => {
+                                if (snapshot.exists()) {
+                                    let uid;
 
-                                       snapshot.forEach((snap) => {
-                                           uid = snap.key;
-                                       });
+                                    snapshot.forEach((snap) => {
+                                        uid = snap.key;
+                                    });
 
-                                       let childNum = snapshot.child(uid)
-                                                              .child('reports')
-                                                              .numChildren();
+                                    let childNum = snapshot.child(uid)
+                                        .child('reports')
+                                        .numChildren();
 
-                                       console.log(childNum);
+                                    console.log(childNum);
 
-                                           const strRef = firebase.storage()
-                                                                  .ref()
-                                                                  .child(uid)
-                                                                  .child('reports')
-                                                                  .child(childNum + '.pdf');
+                                    const strRef = firebase.storage()
+                                        .ref()
+                                        .child(uid)
+                                        .child('reports')
+                                        .child(childNum + '.pdf');
 
-                                           const metaData = {contentType: 'application/pdf'};
+                                    const metaData = {contentType: 'application/pdf'};
 
 
-                                           strRef.put(data)
-                                                 .then(() => {
-                                                     strRef.updateMetadata(metaData)
-                                                           .then();
+                                    strRef.put(data)
+                                        .then(() => {
+                                            strRef.updateMetadata(metaData)
+                                                .then();
 
-                                                     strRef.getDownloadURL()
-                                                           .then((snap) => {
-                                                               rootRef.child(dbChild)
-                                                                      .child(uid)
-                                                                      .child('reports')
-                                                                      .child(childNum + '')
-                                                                      .update({
-                                                                          reportDate: date,
-                                                                          reportURL: snap
-                                                                      })
-                                                                      .then(() => {
-                                                                          showToast("Reported Added Successfully");
-                                                                      });
-                                                           });
-                                                 });
-                                       } else {
-                                           showToast("Kindly Recheck the Patient ID");
-                                   }
+                                            strRef.getDownloadURL()
+                                                .then((snap) => {
+                                                    rootRef.child(dbChild)
+                                                        .child(uid)
+                                                        .child('reports')
+                                                        .child(childNum + '')
+                                                        .update({
+                                                            reportDate: date,
+                                                            reportURL: snap
+                                                        })
+                                                        .then(() => {
+                                                            showToast("Reported Added Successfully");
+                                                        });
+                                                });
+                                        });
+                                } else {
+                                    showToast("Kindly Recheck the Patient ID");
+                                }
 
-                               });
+                            });
 
 
                     }

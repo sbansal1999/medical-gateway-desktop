@@ -1,3 +1,7 @@
+window.addEventListener('load', init);
+const fs = require('fs');
+const path = require('path');
+
 window.addEventListener('message', (evt) => {
         const userName = evt.data.userName;
         const email = evt.data.email;
@@ -5,6 +9,16 @@ window.addEventListener('message', (evt) => {
         loginMessageReceived(userName, email);
     }
 );
+
+function init() {
+    const dir = path.resolve();
+    const filePath = path.join(dir + '/assets/login');
+
+    const data = fs.readFileSync(filePath, {encoding: 'utf-8'});
+    const index = data.indexOf("\n");
+
+    loginMessageReceived(data.substring(0, index), data.substring(index, data.length));
+}
 
 function addLinkWithSubLinks(title, ...titleOfButtonsInside) {
     let htmlTagToAdd = "<details>";
@@ -27,20 +41,22 @@ function getHTMLFileName(subLink) {
 function loginMessageReceived(userName, email) {
     //TODO maybe later add some kind of a welcome screen
     document.querySelector("#mainIframe")
-            .setAttribute('src', 'about:blank');
+        .setAttribute('src', 'about:blank');
 
     clearNavMenu();
     addLinkWithSubLinks("Patients", "Add Patients", "Manage Patients", "Manage Appointments", "Upload Reports");
-    addLinkWithSubLinks("Doctors", "Enroll Doctor", "Manage Doctors");
-    addLinkWithSubLinks("Pharmacy", "Add Medicines", "Manage Medicines");
-    addLinkWithSubLinks("Staff", "Add Staff", "Modify Staff Details");
+    addLinkWithSubLinks("Doctors", "Enroll Doctor");
+    addLinkWithSubLinks("Pharmacy", "Add Medicines");
+    // addLinkWithSubLinks("Doctors", "Enroll Doctor", "Manage Doctors");
+    // addLinkWithSubLinks("Pharmacy", "Add Medicines", "Manage Medicines");
+    // addLinkWithSubLinks("Staff", "Add Staff", "Modify Staff Details");
 
     let helloTitle = document.querySelector('#helloTitle');
     helloTitle.innerHTML += ' ' + userName;
     helloTitle.classList
-              .remove('invisible');
+        .remove('invisible');
     helloTitle.classList
-              .add('visible');
+        .add('visible');
 }
 
 function addLinkInNavMenu(title) {

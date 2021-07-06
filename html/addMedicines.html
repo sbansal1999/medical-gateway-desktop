@@ -31,10 +31,10 @@
 
 </head>
 <body class="defaultMargin">
-    <h3 id="heading">Add Medicines</h3>
-    <!--    TODO get this in center for big screens-->
-    <div>
-        <form action="#" id="inputForm">
+<h3 id="heading">Add Medicines</h3>
+<!--    TODO get this in center for big screens-->
+<div>
+    <form action="#" id="inputForm">
             <span>
                 <table class="inline">
                     <tr>
@@ -65,8 +65,9 @@
                                 <br>
                                 <br>
                                 <div class="centerDiv">
-                                    <label class="centerAlign mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect marginBetweenButtons"
-                                           for="uploadImg">Upload</label>
+                                    <label
+                                            class="centerAlign mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect marginBetweenButtons"
+                                            for="uploadImg">Upload</label>
                                     <input accept="image/*" class="invisible" id="uploadImg" name="uploadImg"
                                            type="file">
                                 </div>
@@ -139,54 +140,54 @@
                         <td class="fixWidth">
                             <span class="secondCol">
                                 <!-- MDL Spinner Component with Single Color -->
-                                <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"
+                                <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinnerp"
                                      id="spinner"></div>
                             </span>
                         </td>
                     </tr>
                 </table>
             </span>
-        </form>
-        <br>
+    </form>
+    <br>
 
-
-        <div class="text-center">
-            <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent "
-                   id="addMedicine"
-                   value="Add">
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect defaultMargin"
-                    id="reset">Clear
-            </button>
-        </div>
-    </div>
 
     <div class="text-center">
-        <p class="defaultMargin"><strong>List of Currently Registered Medicines</strong></p>
+        <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent "
+               id="addMedicine"
+               value="Add">
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect defaultMargin"
+                id="reset">Clear
+        </button>
+    </div>
+</div>
 
-        <div>
-            <table class="table table-sm" id="medTable">
-                <thead>
-                    <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Medicine Name</th>
-                        <th scope="col">Category</th>
-                        <th scope="col">Price</th>
-                    </tr>
-                </thead>
-                <tbody id="medTableTBody">
-                </tbody>
+<div class="text-center">
+    <p class="defaultMargin"><strong>List of Currently Registered Medicines</strong></p>
 
-            </table>
-        </div>
+    <div>
+        <table class="table table-sm" id="medTable">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Medicine Name</th>
+                <th scope="col">Category</th>
+                <th scope="col">Price</th>
+            </tr>
+            </thead>
+            <tbody id="medTableTBody">
+            </tbody>
 
+        </table>
     </div>
 
-    <!--    div for displaying Toast-->
-    <div aria-atomic="true" aria-live="assertive" aria-relevant="text"
-         class="mdl-snackbar mdl-js-snackbar text-center">
-        <div class="mdl-snackbar__text text-center"></div>
-        <button class="mdl-snackbar__action" type="button"></button>
-    </div>
+</div>
+
+<!--    div for displaying Toast-->
+<div aria-atomic="true" aria-live="assertive" aria-relevant="text"
+     class="mdl-snackbar mdl-js-snackbar text-center">
+    <div class="mdl-snackbar__text text-center"></div>
+    <button class="mdl-snackbar__action" type="button"></button>
+</div>
 
 </body>
 

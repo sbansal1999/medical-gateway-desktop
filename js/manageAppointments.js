@@ -59,13 +59,13 @@ function init() {
     };
 
     document.querySelector("#searchButton")
-            .addEventListener('click', searchPatients);
+        .addEventListener('click', searchPatients);
 
     document.querySelector("#refreshButton")
-            .addEventListener('click', fillAppointments);
+        .addEventListener('click', fillAppointments);
 
     document.querySelector('#changeStatus')
-            .addEventListener('click', changeStatus);
+        .addEventListener('click', changeStatus);
 
     const allCheckBox = document.querySelector('#selectAllCheckBox');
     allCheckBox.addEventListener('click', () => {
@@ -108,30 +108,30 @@ function changeStatus() {
         });
 
         const rootRef = firebase.database()
-                                .ref();
+            .ref();
 
         idArray.forEach((index) => {
             rootRef.child(dbChildPatients)
-                   .orderByChild('patientID')
-                   .equalTo(index)
-                   .once('value')
-                   .then((snapshot) => {
-                       snapshot.forEach((snap) => {
-                           let uid = snap.key;
+                .orderByChild('patientID')
+                .equalTo(index)
+                .once('value')
+                .then((snapshot) => {
+                    snapshot.forEach((snap) => {
+                        let uid = snap.key;
 
-                           rootRef.child(dbChildAppoint)
-                                  .child(uid)
-                                  .once('value')
-                                  .then((snap) => {
-                                      snap.forEach((rec) => {
-                                          rec.ref.update({'appointmentFulfilled': true})
-                                             .then(() => {
-                                             });
-                                      });
-                                  });
-                       });
+                        rootRef.child(dbChildAppoint)
+                            .child(uid)
+                            .once('value')
+                            .then((snap) => {
+                                snap.forEach((rec) => {
+                                    rec.ref.update({'appointmentFulfilled': true})
+                                        .then(() => {
+                                        });
+                                });
+                            });
+                    });
 
-                   });
+                });
         });
 
         showToast("Operation Performed Successfully");
@@ -153,21 +153,21 @@ function getSelectedCheckBoxes() {
 
 function fetchAppointByUID(uid) {
     const rootRef = admin.database()
-                         .ref();
+        .ref();
 
     rootRef.child(dbChildAppoint)
-           .child(uid)
-           .limitToLast(limitDB)
-           .once('value')
-           .then((snapshot) => {
-               if (snapshot.exists()) {
-                   snapshot.forEach((snap) => {
-                       addDataToTable(snap.val());
-                   });
-               } else {
-                   showToast("No Appointment Found");
-               }
-           });
+        .child(uid)
+        .limitToLast(limitDB)
+        .once('value')
+        .then((snapshot) => {
+            if (snapshot.exists()) {
+                snapshot.forEach((snap) => {
+                    addDataToTable(snap.val());
+                });
+            } else {
+                showToast("No Appointment Found");
+            }
+        });
 }
 
 function searchPatients() {
@@ -209,41 +209,41 @@ function searchPatients() {
     }
 
     const rootRef = admin.database()
-                         .ref();
+        .ref();
     let uid;
 
     if (key === 'patientID') {
         rootRef.child(dbChildPatients)
-               .orderByChild('patientID')
-               .equalTo(query)
-               .once('value')
-               .then((snapshot) => {
-                   if (snapshot.exists()) {
-                       snapshot.forEach((snap) => {
-                           uid = snap.key;
-                           fetchAppointByUID(uid);
-                       });
-                   } else {
-                       showToast("No Patient Found");
-                   }
-               });
+            .orderByChild('patientID')
+            .equalTo(query)
+            .once('value')
+            .then((snapshot) => {
+                if (snapshot.exists()) {
+                    snapshot.forEach((snap) => {
+                        uid = snap.key;
+                        fetchAppointByUID(uid);
+                    });
+                } else {
+                    showToast("No Patient Found");
+                }
+            });
     } else {
         rootRef.child(dbChildAppoint)
-               .limitToLast(limitDB)
-               .once('value')
-               .then((snapshot) => {
-                   snapshot.forEach((snap) => {
-                       snap.ref.orderByChild(key)
-                           .equalTo(query)
-                           .limitToLast(limitDB)
-                           .once('value')
-                           .then((r) => {
-                               r.forEach((e) => {
-                                   addDataToTable(e.val());
-                               });
-                           });
-                   });
-               });
+            .limitToLast(limitDB)
+            .once('value')
+            .then((snapshot) => {
+                snapshot.forEach((snap) => {
+                    snap.ref.orderByChild(key)
+                        .equalTo(query)
+                        .limitToLast(limitDB)
+                        .once('value')
+                        .then((r) => {
+                            r.forEach((e) => {
+                                addDataToTable(e.val());
+                            });
+                        });
+                });
+            });
     }
 
 
@@ -253,17 +253,17 @@ function fillAppointments() {
     clearTable();
     showToast("Fetching Data");
     const rootRef = admin.database()
-                         .ref();
+        .ref();
 
     rootRef.child('appointment_info')
-           .once('value')
-           .then((snapshot) => {
-               snapshot.forEach((snap) => {
-                   snap.forEach((snapInside) => {
-                       addDataToTable(snapInside.val());
-                   });
-               });
-           });
+        .once('value')
+        .then((snapshot) => {
+            snapshot.forEach((snap) => {
+                snap.forEach((snapInside) => {
+                    addDataToTable(snapInside.val());
+                });
+            });
+        });
 }
 
 function addDataToTable(val) {

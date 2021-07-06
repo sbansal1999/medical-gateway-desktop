@@ -1,14 +1,13 @@
 window.addEventListener('load', init);
 const require = parent.require;
 const admin = require('firebase-admin');
+const firebase = require('firebase');
 const dbChild = 'patients_info';
-let imageCaptured = false;
-
 //File limit size of 500 KiloBytes
 const sizeLimit = 1024 * 500;
 let imageSelected = false;
 
-function firebaseInit() {
+function firebaseAdminInit() {
     let key = require('../assets/firebase-admin-private-key.json');
 
     if (admin.apps.length === 0) {
@@ -19,28 +18,56 @@ function firebaseInit() {
     }
 }
 
+/**
+ * Initializes Firebase Settings
+ */
+function firebaseInit() {
+
+    require('firebase/auth');
+    require('firebase/database');
+    require('firebase/functions');
+    require('firebase/storage');
+
+
+    const firebaseConfig = {
+        //DO NOT CHANGE
+        apiKey: "AIzaSyBo4fQjML7eJWQjBHYHP1Sy6OIT35DuuDo",
+        authDomain: "medical-gateway-296507.firebaseapp.com",
+        databaseURL: "https://medical-gateway-296507.firebaseio.com",
+        projectId: "medical-gateway-296507",
+        storageBucket: "medical-gateway-296507.appspot.com",
+        messagingSenderId: "139008948636",
+        appId: "1:139008948636:web:fe2fac7fca006a616a3059",
+        measurementId: "G-F17P54B7N4"
+    };
+
+    if (firebase.apps.length === 0)
+        firebase.initializeApp(firebaseConfig);
+}
+
 function init() {
+    firebaseAdminInit();
     firebaseInit();
     fetchTodayList();
     fillCurrentDoc();
 
     //TODO add max date to today in datepicker
     document.querySelector('#register')
-            .addEventListener('click', (() => {
-                let isValid = document.querySelector('#inputForm')
-                                      .checkValidity();
-                if (isValid === true) {
-                    submitForm();
-                } else {
-                    showToast("Kindly fill the form completely");
-                    //TODO add some possible exceptions here
-                }
-            }));
+        .addEventListener('click', (() => {
+            let isValid = document.querySelector('#inputForm')
+                .checkValidity();
+            if (isValid === true) {
+                submitForm();
+            } else {
+                showToast("Kindly fill the form completely");
+                //TODO add some possible exceptions here
+            }
+        }));
 
     document.querySelector('#reset')
-            .addEventListener('click', () => {
-                resetForm();
-            });
+        .addEventListener('click', () => {
+            resetForm();
+        });
 
     let inputElement = document.querySelector('#uploadImg');
     inputElement.onchange = function () {
@@ -49,8 +76,8 @@ function init() {
         if (selectedFile.size < sizeLimit) {
             imageSelected = true;
             document.querySelector('#output')
-                    .classList
-                    .remove('hide');
+                .classList
+                .remove('hide');
             document.querySelector('#output').src = URL.createObjectURL(selectedFile);
         } else {
             showToast("Selected File Exceeds the File Limit of " + sizeLimit / 1024 + " KB");
@@ -60,7 +87,7 @@ function init() {
     window.addEventListener('keydown', (evt) => {
         if (evt.key === 'Enter') {
             document.querySelector('#register')
-                    .click();
+                .click();
         }
     });
 
@@ -70,18 +97,18 @@ function fillCurrentDoc() {
     const list = document.querySelector('#currentDoc');
 
     admin.database()
-         .ref('doctors_info')
-         .once('value')
-         .then((snapshot) => {
-             if (snapshot.exists()) {
-                 snapshot.forEach((snap) => {
-                     let opt = document.createElement("option");
-                     opt.text = snap.child('name')
-                                    .val();
-                     list.add(opt);
-                 });
-             }
-         });
+        .ref('doctors_info')
+        .once('value')
+        .then((snapshot) => {
+            if (snapshot.exists()) {
+                snapshot.forEach((snap) => {
+                    let opt = document.createElement("option");
+                    opt.text = snap.child('name')
+                        .val();
+                    list.add(opt);
+                });
+            }
+        });
 }
 
 function submitForm() {
@@ -107,11 +134,11 @@ function submitForm() {
 
 function resetForm() {
     document.querySelector('#inputForm')
-            .reset();
+        .reset();
     document.querySelector('#output').src = '';
     document.querySelector('#output')
-            .classList
-            .add('hide');
+        .classList
+        .add('hide');
 
 
 }
@@ -139,30 +166,30 @@ function fetchTodayList() {
     clearTable();
 
     const rootRef = admin.database()
-                         .ref();
+        .ref();
 
     const today = generatePatientID()
-    .substring(0, 8);
+        .substring(0, 8);
 
     rootRef.child('patients_info')
-           .orderByChild('patientID')
-           .startAt(today)
-           .endAt(today + '\uf8ff')
-           .limitToLast(5)
-           .once('value')
-           .then((snapshot) => {
-               if (snapshot.exists()) {
-                   snapshot.forEach((snap) => {
-                       addDataToTable(snap.val());
-                   });
-               } else {
-                   //No User Registered Today
+        .orderByChild('patientID')
+        .startAt(today)
+        .endAt(today + '\uf8ff')
+        .limitToLast(5)
+        .once('value')
+        .then((snapshot) => {
+            if (snapshot.exists()) {
+                snapshot.forEach((snap) => {
+                    addDataToTable(snap.val());
+                });
+            } else {
+                //No User Registered Today
 
-               }
-           })
-           .catch(() => {
+            }
+        })
+        .catch(() => {
 
-           });
+        });
 
     function clearTable() {
         const todayTable = document.querySelector('#todayTableTBody');
@@ -190,8 +217,8 @@ function generatePatientID() {
 
     //Adds last 2 digits of the year
     id += now.getUTCFullYear()
-             .toString()
-             .substr(-2);
+        .toString()
+        .substr(-2);
 
     //Month starts from 0
     let month = now.getUTCMonth() + 1;
@@ -227,50 +254,119 @@ function generatePatientID() {
  */
 function addPatient(details) {
     //Performs Email Check
-
     admin.database()
-         .ref(dbChild)
-         .orderByChild('emailAddress')
-         .equalTo(details.email)
-         .once('value')
-         .then((snapshot) => {
-                 if (snapshot.exists()) {
-                     showToast("Email ID Already Registered");
-                 } else {
-                     admin.auth()
-                          .createUser({
-                              email: details.email,
-                              phoneNumber: "+91" + details.phoneNum,
-                              displayName: details.displayName,
-                          })
-                          .then((user) => {
-                              addIntoDatabase(details, user.uid);
-                          })
-                          .catch((error) => {
-                              switch (error.code) {
-                                  case "auth/email-already-exists":
-                                      showToast("Email ID Already Registered");
-                                      break;
-                                  case "auth/phone-number-already-exists":
-                                      showToast("Mobile Number Already Registered");
-                                      break;
-                                  case "auth/invalid-phone-number":
-                                      showToast("Kindly recheck the Mobile Number");
-                                      break;
-                                  case "auth/invalid-email":
-                                      showToast("Kindly recheck the Email Address");
-                                      break;
-                                  default:
-                                      showToast("Something has gone wrong. Contact Support");
-                                      break;
-                              }
-                          });
-                 }
-             }
-         )
-         .catch(() => {
-             showToast("Some error occurred. Contact Support for more info");
-         });
+        .ref(dbChild)
+        .orderByChild('emailAddress')
+        .equalTo(details.email)
+        .once('value')
+        .then((snapshot) => {
+                if (snapshot.exists()) {
+                    showToast("Email ID Already Registered");
+                } else {
+                    admin.auth()
+                        .createUser({
+                            email: details.email,
+                            phoneNumber: "+91" + details.phoneNum,
+                            displayName: details.displayName,
+                        })
+                        .then((user) => {
+                            const imgURL = uploadImg(user.uid);
+                            if (imgURL !== null) {
+                                user.photoURL = imgURL;
+                            }
+
+
+                            addIntoDatabase(details, user.uid);
+                        })
+                        .catch((error) => {
+                            switch (error.code) {
+                                case "auth/email-already-exists":
+                                    showToast("Email ID Already Registered");
+                                    break;
+                                case "auth/phone-number-already-exists":
+                                    showToast("Mobile Number Already Registered");
+                                    break;
+                                case "auth/invalid-phone-number":
+                                    showToast("Kindly recheck the Mobile Number");
+                                    break;
+                                case "auth/invalid-email":
+                                    showToast("Kindly recheck the Email Address");
+                                    break;
+                                default:
+                                    showToast("Something has gone wrong. Contact Support");
+                                    break;
+                            }
+                        });
+                }
+            }
+        )
+        .catch(() => {
+            showToast("Some error occurred. Contact Support for more info");
+        });
+
+}
+
+function uploadImg(uid) {
+    let inputElement = document.querySelector('#uploadImg');
+    const filePath = inputElement.files[0].path;
+
+    if (filePath !== null) {
+        const fs = require('fs');
+
+        fs.readFile(filePath, (err, data) => {
+            if (err) {
+                console.log("error in fs");
+            } else {
+                const strRef = firebase.storage()
+                    .ref()
+                    .child(uid)
+                    .child('profile_pic.jpg');
+
+                const metaData = {
+                    contentType: 'image/jpeg'
+                };
+
+                strRef.put(data)
+                    .then(() => {
+
+                        strRef.updateMetadata(metaData)
+                            .then(() => {
+                                console.log('updated');
+                            });
+
+                        //Add photo url to DB for fetching in the android app
+                        strRef.getDownloadURL()
+                            .then((snap) => {
+                                console.log("url");
+                                console.log(snap);
+
+                                admin.auth()
+                                    .updateUser(uid, {photoURL: snap,})
+                                    .then(() => {
+                                        console.log("user updated success");
+                                    })
+                                    .catch((err) => {
+                                        console.log(err);
+                                        console.log("error in update");
+                                    });
+
+                                return snap;
+                            })
+                            .catch(() => {
+                            });
+
+                        console.log("File Uploaded Successfully");
+                    })
+                    .catch(() => {
+                        console.log("Error");
+                    });
+
+
+            }
+        });
+    }
+
+    return null;
 
 }
 
@@ -296,10 +392,10 @@ function addIntoDatabase(data, uid) {
     };
 
     const dbRef = admin.database()
-                       .ref(dbChild);
+        .ref(dbChild);
 
     const snap = dbRef.child(uid)
-                      .set(obj);
+        .set(obj);
     // Adds the obj to the Firebase Realtime Database
     snap.then(() => {
         showToast("Patient Added Successfully");
@@ -319,37 +415,4 @@ function addIntoDatabase(data, uid) {
 function retrieveTextFromID(id) {
     return document.querySelector('#' + id)
         .value;
-}
-
-function uploadImage() {
-
-}
-
-function attachCamera() {
-    Webcam.set({
-        width: 400,
-        height: 250,
-        image_format: 'jpeg',
-        jpeg_quality: 100
-    });
-
-    Webcam.attach('#camera');
-    Webcam.on('error', () => {
-        //TODO add a loading image while the camera is still loading, image is in assets folder
-    });
-}
-
-function captureImage(msg) {
-    Webcam.snap((data_uri) => {
-        //Disables Camera and sets the Captured Image instead of it
-        Webcam.reset('#camera');
-
-        document.querySelector('#camera').innerHTML += '<img alt="Error" src="' + data_uri + '"/>';
-    });
-
-    if (msg !== 'first') {
-        document.querySelector("#captureImage").disabled = true;
-        imageCaptured = true;
-    }
-    document.querySelector('#retakeImage').disabled = false;
 }

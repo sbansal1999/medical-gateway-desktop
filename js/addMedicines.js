@@ -14,32 +14,32 @@ function init() {
     fetchList();
 
     document.querySelector('#addMedicine')
-            .addEventListener('click', (() => {
-                setLoadingVisible(true);
+        .addEventListener('click', (() => {
+            setLoadingVisible(true);
 
-                let isValid = document.querySelector('#inputForm')
-                                      .checkValidity();
-                let idError = false;
-                if (retrieveTextFromID('medID')
+            let isValid = document.querySelector('#inputForm')
+                .checkValidity();
+            let idError = false;
+            if (retrieveTextFromID('medID')
                 .trim().length !== 6) {
-                    isValid = false;
-                    idError = true;
-                    showToast("ID should have only 5 numbers");
-                }
+                isValid = false;
+                idError = true;
+                showToast("ID should have only 5 numbers");
+            }
 
-                if (isValid === true && imageSelected === true) {
-                    submitForm();
-                } else if (imageSelected !== true) {
+            if (isValid === true && imageSelected === true) {
+                submitForm();
+            } else if (imageSelected !== true) {
+                setLoadingVisible(false);
+                showToast("Kindly Upload an Image First");
+            } else {
+                if (idError === false) {
+                    showToast("Kindly fill the form completely");
                     setLoadingVisible(false);
-                    showToast("Kindly Upload an Image First");
-                } else {
-                    if (idError === false) {
-                        showToast("Kindly fill the form completely");
-                        setLoadingVisible(false);
-                    }
-                    //TODO add some possible exceptions here
                 }
-            }));
+                //TODO add some possible exceptions here
+            }
+        }));
 
     let inputElement = document.querySelector('#uploadImg');
     inputElement.onchange = function () {
@@ -49,8 +49,8 @@ function init() {
         if (selectedFile.size < sizeLimit) {
             imageSelected = true;
             document.querySelector('#output')
-                    .classList
-                    .remove('hide');
+                .classList
+                .remove('hide');
             document.querySelector('#output').src = URL.createObjectURL(selectedFile);
         } else {
             showToast("Selected File Exceeds the File Limit of " + sizeLimit / 1024 + " KB");
@@ -58,9 +58,9 @@ function init() {
     };
 
     document.querySelector('#reset')
-            .addEventListener('click', () => {
-                resetForm();
-            });
+        .addEventListener('click', () => {
+            resetForm();
+        });
 
 }
 
@@ -105,23 +105,23 @@ function fetchList() {
     clearTable();
 
     const rootRef = admin.database()
-                         .ref();
+        .ref();
 
     rootRef.child(dbChild)
-           .limitToLast(5)
-           .once('value')
-           .then((snapshot) => {
-               if (snapshot.exists()) {
-                   snapshot.forEach((snap) => {
-                       addDataToTable(snap.key, snap.val());
-                   });
-               } else {
-                   //No Medicines are Currently Registered
-               }
-           })
-           .catch((err) => {
-               console.log(err);
-           });
+        .limitToLast(5)
+        .once('value')
+        .then((snapshot) => {
+            if (snapshot.exists()) {
+                snapshot.forEach((snap) => {
+                    addDataToTable(snap.key, snap.val());
+                });
+            } else {
+                //No Medicines are Currently Registered
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 
     function clearTable() {
         const table = document.querySelector('#medTableTBody');
@@ -159,10 +159,10 @@ function submitForm() {
 
 function addIntoDatabase(data, id) {
     const dbRef = admin.database()
-                       .ref(dbChild);
+        .ref(dbChild);
 
     const snap = dbRef.child(id)
-                      .set(data);
+        .set(data);
 
     snap.then(() => {
         showToast("Medicine Added Successfully");
@@ -177,23 +177,23 @@ function addIntoDatabase(data, id) {
 function addMed(medDetails, id) {
 
     admin.database()
-         .ref(dbChild)
-         .child(id)
-         .once('value')
-         .then((snap) => {
-             if (snap.exists()) {
-                 showToast("Medicine with Same ID is Already Added");
-                 setLoadingVisible(false);
-             } else {
-                 uploadImg(id);
-                 addIntoDatabase(medDetails, id);
-             }
+        .ref(dbChild)
+        .child(id)
+        .once('value')
+        .then((snap) => {
+            if (snap.exists()) {
+                showToast("Medicine with Same ID is Already Added");
+                setLoadingVisible(false);
+            } else {
+                uploadImg(id);
+                addIntoDatabase(medDetails, id);
+            }
 
-         })
-         .catch((err) => {
-             console.log('err');
-             console.log(err);
-         });
+        })
+        .catch((err) => {
+            console.log('err');
+            console.log(err);
+        });
 
     // function showImageNotSelectedWindow() {
     //     if (imageSelected === true) {
@@ -240,34 +240,34 @@ function uploadImg(id) {
                 console.log("error in fs");
             } else {
                 const strRef = firebase.storage()
-                                       .ref()
-                                       .child('medicines')
-                                       .child(id)
-                                       .child('photo.jpg');
+                    .ref()
+                    .child('medicines')
+                    .child(id)
+                    .child('photo.jpg');
 
                 const metaData = {
                     contentType: 'image/jpeg'
                 };
 
                 strRef.put(data)
-                      .then(() => {
+                    .then(() => {
 
-                          strRef.updateMetadata(metaData)
-                                .then();
+                        strRef.updateMetadata(metaData)
+                            .then();
 
-                          strRef.getDownloadURL()
-                                .then((snap) => {
-                                    const rootRef = firebase.database()
-                                                            .ref();
+                        strRef.getDownloadURL()
+                            .then((snap) => {
+                                const rootRef = firebase.database()
+                                    .ref();
 
-                                    rootRef.child(dbChild)
-                                           .child(id)
-                                           .update({
-                                               photoURL: snap,
-                                           })
-                                           .then();
-                                });
-                      });
+                                rootRef.child(dbChild)
+                                    .child(id)
+                                    .update({
+                                        photoURL: snap,
+                                    })
+                                    .then();
+                            });
+                    });
             }
         });
     }
@@ -289,11 +289,11 @@ function retrieveTextFromID(id) {
 
 function resetForm() {
     document.querySelector('#inputForm')
-            .reset();
+        .reset();
     document.querySelector('#output').src = '';
     document.querySelector('#output')
-            .classList
-            .add('hide');
+        .classList
+        .add('hide');
 }
 
 function showToast(message) {

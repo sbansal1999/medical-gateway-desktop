@@ -4,7 +4,7 @@ body, html {
 }
 
 .defaultMargin {
-    margin:16px 16px 16px 16px ;
+    margin: 16px 16px 16px 16px;
 }
 
 .visible {
@@ -36,6 +36,7 @@ td.fixWidth {
 .hide {
     display: none;
 }
+
 .leftMargin {
     margin-left: 25px;
 }

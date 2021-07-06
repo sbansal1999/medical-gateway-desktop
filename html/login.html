@@ -15,45 +15,45 @@
     <script src="../js/processLogin.js"></script>
 </head>
 <body>
-    <div id="login-container">
-        <p id="heading">Login</p>
-        <div id="credentials">
-            <form action="#">
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" id="loginID" type="text">
-                    <label class="mdl-textfield__label" for="loginID">Login ID</label>
-                    <span class="mdl-textfield__error" id="wrongCred">Wrong Credentials</span>
-                </div>
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" id="password" type="password">
-                    <label class="mdl-textfield__label" for="password">Password</label>
-                </div>
-            </form>
-            <div id="userChoice">
-                <label for="admin">Admin</label>
-                <input checked="checked" id="admin" name="typeOfUser" type="radio">
-                <label for="staff">Staff</label>
-                <input id="staff" name="typeOfUser" type="radio">
+<div id="login-container">
+    <p id="heading">Login</p>
+    <div id="credentials">
+        <form action="#">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" id="loginID" type="text">
+                <label class="mdl-textfield__label" for="loginID">Login ID</label>
+                <span class="mdl-textfield__error" id="wrongCred">Wrong Credentials</span>
             </div>
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
-                    id="loginButton">
-                Login
-            </button>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" id="password" type="password">
+                <label class="mdl-textfield__label" for="password">Password</label>
+            </div>
+        </form>
+        <div id="userChoice">
+            <label for="admin">Admin</label>
+            <input checked="checked" id="admin" name="typeOfUser" type="radio">
+            <label for="staff" class="hide">Staff</label>
+            <input id="staff" name="typeOfUser" type="radio" class="hide">
         </div>
-        <br>
-        <div id="forgotPasswordContainer">
-            <div class="mdl-spinner mdl-js-spinner" id="loading"></div>
-            <button class="mdl-button mdl-js-button" id="forgotPass" >Forgot Password?</button>
-        </div>
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+                id="loginButton">
+            Login
+        </button>
     </div>
-
-    <div aria-live="assertive" aria-atomic="true" aria-relevant="text" class="mdl-snackbar mdl-js-snackbar">
-        <div class="mdl-snackbar__text"></div>
-        <button type="button" class="mdl-snackbar__action"></button>
+    <br>
+    <div id="forgotPasswordContainer">
+        <div class="mdl-spinner mdl-js-spinner" id="loading"></div>
+        <button class="mdl-button mdl-js-button" id="forgotPass">Forgot Password?</button>
     </div>
+</div>
 
-    <!--Firebase Scripts-->
-    <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-functions.js"></script>
+<div aria-atomic="true" aria-live="assertive" aria-relevant="text" class="mdl-snackbar mdl-js-snackbar">
+    <div class="mdl-snackbar__text"></div>
+    <button class="mdl-snackbar__action" type="button"></button>
+</div>
+
+<!--Firebase Scripts-->
+<script src="https://www.gstatic.com/firebasejs/8.4.3/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-functions.js"></script>
 </body>
 </html>
