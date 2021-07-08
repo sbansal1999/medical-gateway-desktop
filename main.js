@@ -15,46 +15,37 @@ function createWindow() {
         resizable: false
     });
 
-    //Creating Custom Menu
-    const template = Menu.buildFromTemplate([{
-        label: 'Manage',
-        submenu: [
-            {
-                label: 'Logout', id: 'logout', click() {
-
-                    const dir = path.resolve();
-                    const filePath = path.join(dir + '/assets/login');
-
-                    fs.unlink(filePath, (err) => {
-                        if (err) {
-                            console.log(err);
-                        }
-                        const htmlPath = path.join('file://', __dirname, 'html/mainWindow.html');
-
-                        window.loadURL(htmlPath)
-                            .then();
-                        window.show();
-                    });
-                }
-            },
-            {
-                label: 'Exit', click() {
-                    app.quit();
-                }
-            },
-        ]
-    }]);
-
-    Menu.setApplicationMenu(template);
-
-    // const dir = path.resolve();
-    // const filePath = path.join(dir + '/assets/login');
-    // try{
-    //     fs.readFileSync(filePath, 'utf-8')
-    // } catch (err) {
-    //     Menu.getApplicationMenu().getMenuItemById('logout').enabled = false;
-    // }
-
+    // //Creating Custom Menu
+    // const template = Menu.buildFromTemplate([{
+    //     label: 'Manage',
+    //     submenu: [
+    //         {
+    //             label: 'Logout', id: 'logout', click() {
+    //
+    //                 const dir = path.resolve();
+    //                 const filePath = path.join(dir + '/assets/login');
+    //
+    //                 fs.unlink(filePath, (err) => {
+    //                     if (err) {
+    //                         console.log(err);
+    //                     }
+    //                     const htmlPath = path.join('file://', __dirname, 'html/mainWindow.html');
+    //
+    //                     window.loadURL(htmlPath)
+    //                         .then();
+    //                     window.show();
+    //                 });
+    //             }
+    //         },
+    //         {
+    //             label: 'Exit', click() {
+    //                 app.quit();
+    //             }
+    //         },
+    //     ]
+    // }]);
+    //
+    // Menu.setApplicationMenu(template);
 
     const htmlPath = path.join('file://', __dirname, 'html/mainWindow.html');
 

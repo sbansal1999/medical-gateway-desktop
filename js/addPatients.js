@@ -113,6 +113,7 @@ function fillCurrentDoc() {
 
 function submitForm() {
     showToast("Registering");
+    setLoadingVisible(true);
 
     const patientDetails = getPatientDetails();
 
@@ -122,13 +123,21 @@ function submitForm() {
         return {
             displayName: retrieveTextFromID('pName'),
             phoneNum: retrieveTextFromID('pMobNum'),
-            //TODO  photoURL: document.querySelector('#camera')
             email: retrieveTextFromID('pEmailAddress'),
             address: retrieveTextFromID('pAddress'),
             dob: retrieveTextFromID('pDOB'),
             id: generatePatientID(),
             currentDoc: retrieveTextFromID('currentDoc'),
         }
+    }
+}
+
+function setLoadingVisible(visibility) {
+    let loading = document.querySelector('#loading');
+    if (visibility === true) {
+        loading.classList.add('is-active');
+    } else {
+        loading.classList.remove('is-active')
     }
 }
 
@@ -275,7 +284,6 @@ function addPatient(details) {
                                 user.photoURL = imgURL;
                             }
 
-
                             addIntoDatabase(details, user.uid);
                         })
                         .catch((error) => {
@@ -302,7 +310,9 @@ function addPatient(details) {
         )
         .catch(() => {
             showToast("Some error occurred. Contact Support for more info");
-        });
+        }).finally(() => {
+        setLoadingVisible(false);
+    });
 
 }
 
@@ -403,7 +413,9 @@ function addIntoDatabase(data, uid) {
     })
         .catch(() => {
             showToast("Some error occurred. Contact Support for more info");
-        })
+        }).finally(() => {
+        setLoadingVisible(false);
+    });
 
 }
 
