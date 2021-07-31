@@ -52,7 +52,6 @@ function createWindow() {
     window.loadURL(htmlPath)
         .then();
     window.show();
-
 }
 
 app.whenReady()

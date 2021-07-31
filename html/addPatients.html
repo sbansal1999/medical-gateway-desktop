@@ -96,8 +96,50 @@
                     <tr>
                         <td class="fixWidth">
                             <span class="firstCol">
+                                    <label for="severity">Severity</label>
+                                    <select
+                                            id="severity" style="width: 150px;">
+                                   <option disabled selected>Select</option>
+                                        <option>Low</option>
+                                        <option>Normal</option>
+                                        <option>High</option>
+                                        <option>Critical</option>
+                                    </select>
+                                <br><br>
+                            </span>
+                        </td>
+                        <td class="fixWidth">
+                            <span class="secondCol">
+                                    <label for="category">Category</label>
+                                <select
+                                        id="category" style="width: 150px;">
+                                    <option disabled selected>Select Category</option>
+                                    <option>-------------</option>
+                                    <option>Physician</option>
+                                    <option>Cardiologist</option>
+                                    <option>Audiologist</option>
+                                    <option>Dentist</option>
+                                    <option>ENT Specialist</option>
+                                    <option>Gynaecologist</option>
+                                    <option>Orthopaedic</option>
+                                    <option>Pediatrician</option>
+                                    <option>Psychiatrist</option>
+                                    <option>Veterinarian</option>
+                                    <option>Radiologist</option>
+                                    <option>Pulmonologist</option>
+                                    <option>Endocrinologist</option>
+                                    <option>Oncologist</option>
+                                    <option>Neurologist</option>
+                                    </select>
+                                <br><br>
+                            </span>
+                                </td>
+                    </tr>
+                    <tr>
+                        <td class="fixWidth">
+                            <span class="firstCol">
                                 <span>Email Address</span>
-                                <div class="mdl-textfield mdl-js-textfield ">
+                                <div class="mdl-textfield mdl-js-textfield">
                                     <input class="mdl-textfield__input" id="pEmailAddress" required type="text">
                                     <label class="mdl-textfield__label" for="pEmailAddress">example@abc.com</label>
                                 </div>
@@ -105,22 +147,74 @@
                         </td>
                         <td class="fixWidth">
                             <span class="secondCol">
-                                <div class="mdl-textfield mdl-js-textfield ">
-                                    <label for="currentDoc">Current Doctor</label>
-                                <br>
-                                    <select class="form-control-inline" id="currentDoc" style="width: 150px;">
-                                    <option>Select Doctor</option>
-                                    </select>
-                                </div>
-
-                                <div class="mdl-spinner mdl-js-spinner" id="loading"></div>
+                                <label for="marital">Marital Status</label>
+                                <select id="marital" style="width: 125px">
+                                    <option disabled selected>Select Status</option>
+                                    <option>Un-Married</option>
+                                    <option>Married</option>
+                                </select>
                             </span>
                         </td>
                     </tr>
-                </table>
-            </span>
+                    <tr>
+                        <td class="fixWidth">
+                            <span class="firstCol">
+                                <span>Problem Description</span>
+                                <div class="mdl-textfield mdl-js-textfield">
+                                    <input class="mdl-textfield__input" id="pProblemDesc" required type="text" style="width: 500px;" >
+                                    <label class="mdl-textfield__label" style="width: 500px;"for="pProblemDesc">Enter a Brief Description of the Problem</label>
+                                </div>
+                            </span>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="fixWidth">
+                            <span class="firstCol">
+                                <label for="reference">How do you know us?</label>
+                                <select id="reference" style="width: 140px">
+                                    <option disabled selected>Select Source</option>
+                                    <option>Friend</option>
+                                    <option>Doctor</option>
+                                    <option>Advertisements</option>
+                                    <option>Others</option>
+                                </select>
+
+                            </span>
+                        </td>
+                        <td class="fixWidth">
+                            <span class="secondCol">
+                                <div class="mdl-textfield mdl-js-textfield invisible" id="textSpecify">
+                                    <input class="mdl-textfield__input" id="source" type="text">
+                                    <label class="mdl-textfield__label" for="source">Please Specify</label>
+                                </div>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        <span class="firstCol">
+                            <label for="paymentMode">Payment Mode</label>
+                            <select id="paymentMode" style="width: 175px">
+                                <option disabled selected>Select Mode</option>
+                                <option>Cash</option>
+                                <option>Debit / Credit Card</option>
+                            </select>
+                        </span>
+                        </td>
+                        <td class="fixWidth">
+                            <span class="secondCol">
+                                <div class="mdl-textfield mdl-js-textfield invisible" id="paymentDiv">
+                                    <input class="mdl-textfield__input" id="paymentDetails" type="text">
+                                    <label class="mdl-textfield__label" for="paymentDetails" id="paymentLabel"></label>
+                                </div>
+                            </span>
+                        </td>
+                    </tr>
+
+</table>
+</span>
     </form>
-    <br>
     <p class="defaultMargin">By Registering, the Patient agrees that He/She has read and understood all the related
         T&C</p>
 
@@ -132,27 +226,9 @@
                 id="reset">Clear
         </button>
     </div>
-</div>
+    <!-- MDL Spinner Component -->
+    <div class="mdl-spinner mdl-js-spinner centerAlign" id="loading"></div>
 
-<!--    div to display List of Patients Registered Today-->
-<div class="text-center">
-    <p class="defaultMargin"><strong>List of Patients Registered Today</strong></p>
-
-    <div>
-        <table class="table table-sm" id="todayTable">
-            <thead>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Name</th>
-                <th scope="col">Mobile No.</th>
-                <th scope="col">Address</th>
-            </tr>
-            </thead>
-            <tbody id="todayTableTBody">
-            </tbody>
-
-        </table>
-    </div>
 
 </div>
 

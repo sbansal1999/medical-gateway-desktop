@@ -48,15 +48,13 @@ function firebaseInit() {
 function init() {
     firebaseAdminInit();
     firebaseInit();
-    fetchTodayList();
-    fillCurrentDoc();
 
     //TODO add max date to today in datepicker
     document.querySelector('#register')
         .addEventListener('click', (() => {
             let isValid = document.querySelector('#inputForm')
                 .checkValidity();
-            if (isValid === true) {
+            if ('dadw') {
                 submitForm();
             } else {
                 showToast("Kindly fill the form completely");
@@ -84,6 +82,34 @@ function init() {
         }
     };
 
+    document.querySelector('#reference').addEventListener('change', (event) => {
+        if (event.target.value === 'Doctor' || event.target.value === 'Others') {
+            document.querySelector('#textSpecify').classList.remove('invisible');
+        } else {
+            document.querySelector('#textSpecify').classList.add('invisible');
+        }
+    });
+
+    document.querySelector('#paymentMode').addEventListener('change', (event) => {
+
+        const field = document.querySelector('#paymentDiv');
+        let value = event.target.value;
+
+        switch (value) {
+            case 'Debit / Credit Card':
+                field.classList.remove('invisible');
+                document.querySelector('#paymentLabel').innerText = 'Enter Receipt No.';
+                document.querySelector('#paymentDetails').type = 'text';
+                break;
+            case 'Cash':
+                field.classList.remove('invisible');
+                document.querySelector('#paymentLabel').innerText = 'Enter Amount Taken';
+                document.querySelector('#paymentDetails').type = 'number';
+                break;
+
+        }
+    });
+
     window.addEventListener('keydown', (evt) => {
         if (evt.key === 'Enter') {
             document.querySelector('#register')
@@ -93,31 +119,14 @@ function init() {
 
 }
 
-function fillCurrentDoc() {
-    const list = document.querySelector('#currentDoc');
-
-    admin.database()
-        .ref('doctors_info')
-        .once('value')
-        .then((snapshot) => {
-            if (snapshot.exists()) {
-                snapshot.forEach((snap) => {
-                    let opt = document.createElement("option");
-                    opt.text = snap.child('name')
-                        .val();
-                    list.add(opt);
-                });
-            }
-        });
-}
-
 function submitForm() {
     showToast("Registering");
     setLoadingVisible(true);
 
     const patientDetails = getPatientDetails();
 
-    addPatient(patientDetails);
+    console.log(patientDetails);
+    // addPatient(patientDetails);
 
     function getPatientDetails() {
         return {
@@ -127,7 +136,12 @@ function submitForm() {
             address: retrieveTextFromID('pAddress'),
             dob: retrieveTextFromID('pDOB'),
             id: generatePatientID(),
-            currentDoc: retrieveTextFromID('currentDoc'),
+            currentDoc: retrieveTextFromID('category'),
+            referredBy: retrieveTextFromID('reference'),
+            source: retrieveTextFromID('source'),
+            paymentMode: retrieveTextFromID('paymentMode'),
+            paymentInfo: retrieveTextFromID('paymentDiv'),
+            problemDesc: retrieveTextFromID('pProblemDesc'),
         }
     }
 }
@@ -166,54 +180,6 @@ function showToast(message) {
             message: message
         }
     );
-}
-
-/**
- * Method that retrieves data of patients that are registered today
- */
-function fetchTodayList() {
-    clearTable();
-
-    const rootRef = admin.database()
-        .ref();
-
-    const today = generatePatientID()
-        .substring(0, 8);
-
-    rootRef.child('patients_info')
-        .orderByChild('patientID')
-        .startAt(today)
-        .endAt(today + '\uf8ff')
-        .limitToLast(5)
-        .once('value')
-        .then((snapshot) => {
-            if (snapshot.exists()) {
-                snapshot.forEach((snap) => {
-                    addDataToTable(snap.val());
-                });
-            } else {
-                //No User Registered Today
-
-            }
-        })
-        .catch(() => {
-
-        });
-
-    function clearTable() {
-        const todayTable = document.querySelector('#todayTableTBody');
-        todayTable.innerHTML = '';
-    }
-
-    function addDataToTable(val) {
-        const todayTable = document.querySelector('#todayTableTBody');
-
-        let row = todayTable.insertRow(-1);
-        row.insertCell(0).innerHTML = val.patientID;
-        row.insertCell(1).innerHTML = val.name;
-        row.insertCell(2).innerHTML = val.phone;
-        row.insertCell(3).innerHTML = val.residentialAddress;
-    }
 }
 
 /**

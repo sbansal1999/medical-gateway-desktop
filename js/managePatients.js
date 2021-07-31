@@ -101,8 +101,8 @@ function dischargePatients() {
 
         let allDischarged = true;
 
-        idArray.forEach((index) => {
-            rootRef.child(dbChild)
+        idArray.forEach(async (index) => {
+            await rootRef.child(dbChild)
                 .orderByChild('patientID')
                 .equalTo(index)
                 .once('value')
@@ -113,7 +113,6 @@ function dischargePatients() {
                                 dischargeDate: dischargeDate,
                             })
                                 .then(() => {
-                                    showToast("Selected Patients have been Successfully Discharged");
                                 });
                         } else {
                             allDischarged = false;
@@ -121,6 +120,13 @@ function dischargePatients() {
                     });
                 });
         });
+
+        if (allDischarged === true) {
+            showToast("Patients have been discharged successfully");
+        } else {
+            showToast("Contact Support");
+        }
+
 
         uncheckBoxes();
     }
